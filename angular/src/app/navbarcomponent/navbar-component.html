@@ -1,0 +1,60 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggle button -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-label="Toggle navigation"
+        [attr.aria-expanded]="!service.isCollapsed"
+        (click)="service.isCollapsed = !service.isCollapsed"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+  
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar brand -->
+        <abp-logo *abpReplaceableTemplate="{ componentKey: service.logoComponentKey }"  style="width: 5%;"></abp-logo>
+
+
+        <!-- Left links -->
+        <abp-routes
+          *abpReplaceableTemplate="{
+            componentKey: service.routesComponentKey,
+            inputs: {
+              smallScreen: { value: service.smallScreen }
+            }
+          }"
+         
+          [smallScreen]="service.smallScreen"
+        ></abp-routes>
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+  
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        <abp-nav-items
+          *abpReplaceableTemplate="{
+            componentKey: service.navItemsComponentKey
+          }"
+          
+        ></abp-nav-items>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+    
+  </nav>
+  <!-- Navbar -->
+  <div class="container mt-3">
+    <abp-page-alert-container></abp-page-alert-container>
+  
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
+  

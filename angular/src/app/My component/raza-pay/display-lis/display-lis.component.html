@@ -1,0 +1,99 @@
+<table class="table align-middle mb-0 bg-white">
+  <thead class="bg-light">
+    <tr>
+      <th>{{'::PaymentId' | abpLocalization }}</th>
+      <th>{{'::RazorpayOrderId' | abpLocalization }}</th>
+      <th>{{'::Amount' | abpLocalization }}</th>
+      <th>{{'::Email' | abpLocalization }}</th>
+      <th>{{'::Contact' | abpLocalization }}</th>
+      <th>{{'::CreatedAt' | abpLocalization }}</th>
+      <th>{{'::Status' | abpLocalization }}</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let a  of _paymentdetails.items">
+    <tr>
+      <td>
+        <p class=" mb-0">{{a.id}}</p>
+      </td>
+      <td>
+        <p class=" mb-0">{{a.order_id}}</p>
+      </td>
+      <td>
+        <p class=" mb-0"><samp class="text-muted">&#8377;</samp> {{a.amount/100}}.00</p>
+
+      </td>
+      <td>
+        <p class=" mb-0">{{a.email}}</p>
+
+      </td>
+      <td>
+        <p class=" mb-0">{{a.contact}}</p>
+
+      </td>
+      <td>
+        <p class=" mb-0">{{a.created_at}}</p>
+
+      </td>
+      <td>
+
+        <ng-container *ngIf="a.status =='captured'; else elseTemplate">
+          <span class="badge badge-success rounded-pill d-inline">{{'::'+a.status | abpLocalization}}</span>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <ng-container *ngIf="a.status =='refunded'; else elseTemplate">
+            <span class="badge badge-info rounded-pill d-inline">{{'::'+a.status | abpLocalization}}</span>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <span class="badge badge-danger rounded-pill d-inline">{{'::'+a.status | abpLocalization}}</span>
+          </ng-template>
+
+
+        </ng-template>
+
+        <!-- <span *ngIf="a.status =='captured'"  class="badge badge-success rounded-pill d-inline">{{a.status}}</span>
+        <span *ngIf="a.status !='captured'"  class="badge badge-success rounded-pill d-inline">{{a.status}}</span>
+        <span *ngIf="a.status !='efunded'"  class="badge badge-success rounded-pill d-inline">{{a.status}}</span> -->
+
+      </td>
+      <td>
+
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<div id="pageNavPosition" class="pager-nav"></div>
+
+<!-- <script src="PagerJS.js" defer></script> -->
+
+<script>
+let pager = new Pager('pager', 3);
+
+pager.init();
+pager.showPageNav('pager', 'pageNavPosition');
+pager.showPage(1);
+</script>
+
+
+<!-- <table  class="table align-middle mb-0 bg-white">
+  <thead>
+    <tr>
+      <th *ngFor="let item of this.cust[0] | keyvalue">{{item.key}}</th>
+    </tr>
+
+  </thead>
+<tbody *ngFor="let item of this.cust | keyvalue ">
+    <tr>
+
+      <td>{{item[item.key]}}</td>
+      <td>{{item.City}}</td>
+      <td>{{item.CompanyName}}</td>
+      <td>{{item.ContactName}}</td>
+      <td>{{item.ContactTitle}}</td>
+      <td>{{item.Country}}</td>
+      <td>{{item.Phone}}</td>
+      <td>{{item. PostalCode}}</td>
+    </tr>
+
+</tbody>
+</table> -->

@@ -1,0 +1,67 @@
+<!-- <select (change)="changeFunction(id.value)" #id>
+  <option *ngFor="let item of template" [value]="item.name">{{item.name}}</option>
+</select> -->
+
+<!-- <div [innerHTML]="test1==null?'hello':test1"></div> -->
+<!-- <iframe [srcdoc]="test1==null?'hello':test1"></iframe> -->
+
+<button id="create" class="btn btn-primary" type="button" (click)="createBook()">
+  <i class="fa fa-plus mr-1"></i>
+  <span>{{ '::NewBook' | abpLocalization }}</span>
+</button>
+
+
+<abp-modal [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+      <!-- <h3>{{ (selectedBook.id ? '::Edit' : '::NewBook' ) | abpLocalization }}</h3> -->
+  </ng-template>
+  
+
+  <ng-template #abpBody>
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <div class="form-group">
+          <label for="Template-name">Template name</label><span> * </span>
+          <input type="text" id="Template-name" class="form-control" formControlName="Templatename" autofocus />
+        </div>
+    
+        <div class="form-group">
+          <label for="uplodeTemplateFile">Template File</label><span> * </span>
+          <input type="file" id="uplodeTemplateFile" (change)="handleFileInput($event)" class="form-control"  />
+        </div>
+    
+        <div class="form-group">
+          <label for="TemplateTYpe">Template Type</label><span> * </span>
+          <select class="form-control" id="TemplateTYpe" formControlName="TemplateTYpe">
+            <option [ngValue]="null">Select a book type</option>
+            <option [ngValue]="type.value" *ngFor="let type of templatetype"> {{ type.key }}</option>
+          </select>
+        </div>
+    
+        <div class="form-group">
+          <label class="form-check-label">IS Active</label><span> * </span>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            name="isActive"
+            formControlName="isActive"
+            
+            
+          />
+        </div>
+      </form>
+    </ng-template>
+  <ng-template #abpFooter>
+      <button type="button" class="btn btn-secondary" abpClose>
+          {{ '::Close' | abpLocalization }}
+      </button>
+    
+
+      <button class="btn btn-primary" (click)="save()" >
+            <i class="fa fa-check mr-1"></i>
+            {{ '::Save' | abpLocalization }}
+      </button>
+    </ng-template>
+</abp-modal> 
+
+
+<!-- <button (click)="sendemail(id.value)">send</button> -->

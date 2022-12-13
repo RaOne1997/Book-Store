@@ -1,0 +1,82 @@
+
+    <li class="nav-item" *ngIf="((dropdownLanguages$ | async)?.length || 0) > 0">
+        <a class="dropdown-toggle" href="javascript:void(0)" id="Dropdown" role="button" aria-expanded="false"
+            data-mdb-toggle="dropdown" aria-expanded="false">
+            <i [class]="'flag'+' '+deflang.flagIcon"></i>
+        </a>
+
+
+        
+            <div class="dropdown-menu dropdown-menu-end me-5"  aria-labelledby="Dropdown">
+                <a class="dropdown-item" 
+                ><i [class]="'flag'+' '+deflang.flagIcon"></i>{{deflang.displayName}}
+                <i class="fa fa-check text-success ms-2"></i>
+                <li><hr class="dropdown-divider text-muted"></li>
+            </a>
+                    <a class="dropdown-item" *ngFor="let lang of dropdownLanguages$ | async" href="javascript:void(0)" (click)="onChangeLang(lang.cultureName || '')"><i
+                            [class]="'flag'+' '+lang.flagIcon"></i>{{lang.displayName}} </a>
+            
+
+            </div>
+        
+    </li>
+
+
+<style>
+
+.dropdown-menu {
+   max-height:20rem;
+   overflow:scroll; 
+   overflow-x:hidden; 
+}
+
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 3px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+</style>
+
+
+<!-- <div
+  *ngIf="((dropdownLanguages$ | async)?.length || 0) > 0"
+  class="dropdown"
+  ngbDropdown
+  #languageDropdown="ngbDropdown"
+  display="static"
+>
+  <a
+    ngbDropdownToggle
+    class="nav-link"
+    href="javascript:void(0)"
+    role="button"
+    id="dropdownMenuLink"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    {{ defaultLanguage$ | async }}
+  </a>
+  <div
+    class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
+    aria-labelledby="dropdownMenuLink"
+    [class.d-block]="smallScreen && languageDropdown.isOpen()"
+  >
+    <a
+      *ngFor="let lang of dropdownLanguages$ | async"
+      href="javascript:void(0)"
+      class="dropdown-item"
+      (click)="onChangeLang(lang.cultureName || '')"
+      >{{ lang?.displayName }}</a
+    >
+  </div>
+</div> -->

@@ -1,11 +1,11 @@
 import { ReplaceableComponentsService } from '@abp/ng.core';
+import { eLayoutType } from '@abp/ng.core/public-api';
 import { eIdentityComponents } from '@abp/ng.identity';
-import { eThemeBasicComponents } from '@abp/ng.theme.basic';
+import { eThemeBasicComponents, eUserMenuItems } from '@abp/ng.theme.basic';
 import { NavItem } from '@abp/ng.theme.shared';
 import { Component, TrackByFunction } from '@angular/core';
 import { COstumnavbar } from './navbarcomponent/navbar-component';
 import { NavbarwithsideComponent } from './navbarwithside/navbarwithside.component';
-import { ImagetestComponent } from './users/imagetest/imagetest.component';
 import { UsersComponent } from './users/users.component';
 @Component({
   selector: 'app-root',
@@ -23,9 +23,11 @@ constructor( private replaceableComponents: ReplaceableComponentsService){
   });
 
   this.replaceableComponents.add({
-    component: ImagetestComponent,
+    component: UsersComponent,
     key: eIdentityComponents.Users
   });
+
+
 }
 }
   // trackByFn: TrackByFunction<NavItem> = (_, element) =>console.log( element.id);

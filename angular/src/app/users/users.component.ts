@@ -1,15 +1,16 @@
-import { ExtensibleObject, PagedResultDto } from '@abp/ng.core';
+import { ExtensibleObject, ListService, PagedResultDto } from '@abp/ng.core';
 import { GetIdentityUsersInput, IdentityUserDto, IdentityUserService, IdentityUserUpdateDto } from '@abp/ng.identity/proxy';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  styleUrls: ['./users.component.scss'],
+  providers: [ListService]
 })
 export class UsersComponent implements OnInit {
-  isModalOpen=false
-   abc :IdentityUserUpdateDto ={
+  isModalOpen = false
+  abc: IdentityUserUpdateDto = {
     password: '',
     concurrencyStamp: '',
 
@@ -21,10 +22,10 @@ export class UsersComponent implements OnInit {
     isActive: false,
     lockoutEnabled: false,
     roleNames: [],
-    extraProperties:{}
-    
+    extraProperties: {}
 
-   }
+
+  }
 
   Users: PagedResultDto<IdentityUserDto> = new PagedResultDto<IdentityUserDto>()
   filter: GetIdentityUsersInput = {
@@ -33,12 +34,12 @@ export class UsersComponent implements OnInit {
     maxResultCount: 200
 
   };
-  constructor(private IdentityUser: IdentityUserService) {
+  constructor(private IdentityUser: IdentityUserService, public readonly list: ListService,) {
 
 
   }
-  save(){
-    this.isModalOpen=true
+  save() {
+    this.isModalOpen = true
     console.log(this.isModalOpen)
 
 
@@ -51,12 +52,20 @@ export class UsersComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    
-this.abc.extraProperties.Gender='m'
-console.log(this.abc)
-    this.IdentityUser.getList(this.filter).subscribe(rec => { this.Users = rec })
+    const bookStreamCreator = (query) => this.IdentityUser.getList(query);
+
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.Users = response;
+    });
+
+    // this.abc.extraProperties.Gender = 'm'
+    // console.log(this.abc)
+    // this.IdentityUser.getList(this.filter).subscribe(rec => { this.Users = rec })
     // this.IdentityUser.update(,).subscribe(rec => { this.Users = rec })
 
+  }
+  addItem() {
+   this.list.get()
   }
   edituser(userid) {
     this.IdentityUser.get(userid).subscribe(rec => { console.log(rec) })

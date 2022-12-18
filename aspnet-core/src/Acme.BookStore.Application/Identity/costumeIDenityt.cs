@@ -63,5 +63,48 @@ namespace Acme.BookStore.Identity
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
+
+        public override async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+        {
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(id);
+
+            user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+
+            (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+
+            await UpdateUserByInput(user, input);
+            var abc = input.ExtraProperties.GetValueOrDefault("Profilepic");
+            var gender = input.ExtraProperties.GetValueOrDefault("Gender");
+            var title = input.ExtraProperties.GetValueOrDefault("Title");
+            title = (Title)Enum.ToObject(typeof(Title), title);
+
+            if (abc != null)
+            {
+                byte[] bytes = System.Convert.FromBase64String(abc.ToString());
+                user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
+            }
+            user.SetProperty(UserConsts.TitlePropertyName, title);
+            user.SetProperty(UserConsts.GenderPropertyName, gender);
+
+            (await UserManager.UpdateAsync(user)).CheckErrors();
+
+            if (!input.Password.IsNullOrEmpty())
+            {
+                (await UserManager.RemovePasswordAsync(user)).CheckErrors();
+                (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+        public override async Task<IdentityUserDto> GetAsync(Guid id)
+        {
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
+                await UserManager.GetByIdAsync(id)
+            );
+        }
     }
 }

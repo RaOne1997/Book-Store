@@ -1,11 +1,10 @@
 <abp-modal [(visible)]="isModalOpen">
+        <form #templateVariableName="ngForm" >
     <ng-template #abpHeader>
         <h3>{{ (this.UserID ? '::Edit' : '::NewBook' ) | abpLocalization }}</h3>
     </ng-template>
-    <form #templateVariableName="ngForm">
 
         <ng-template #abpBody>
-
             <ul class="nav nav-tabs mb-3 d-flex justify-content-center" id="ex1" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
@@ -29,8 +28,8 @@
                             <div class="form-group">
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label">Uplode Image</label>
-                                    <input (change)="upload($event)" #Profilepic class="form-control"
-                                        hidden type="file" id="formFile">
+                                    <input (change)="upload($event)" #Profilepic class="form-control" hidden type="file"
+                                        id="formFile">
                                 </div>
 
                             </div>
@@ -39,8 +38,9 @@
 
                     <div class="form-group">
                         <label for="book-type">Type </label>&nbsp;<span class="text-danger">*</span>
-                        <select class="form-control" id="book-type" [(ngModel)]="getuserforedit?.extraProperties.Title" name="Title">
-                            <option [ngValue]="null">Select title</option>
+                        <select class="form-control" id="book-type" [(ngModel)]="getuserforedit?.extraProperties.Title"
+                            name="Title">
+                            <option [ngValue]="0">Select title</option>
                             <option [ngValue]="type.value" *ngFor="let type of title"> {{ type.key }}</option>
                         </select>
                     </div>
@@ -52,7 +52,8 @@
 
                     <div class="form-group">
                         <label for="surname">Last name </label>&nbsp;<span class="text-danger">*</span>
-                        <input [(ngModel)]="getuserforedit.surname" type="test" id="surname" name="surname" class="form-control " />
+                        <input [(ngModel)]="getuserforedit.surname" type="test" id="surname" name="surname"
+                            class="form-control " />
                     </div>
 
                     <div class="form-group mt-2">
@@ -85,20 +86,21 @@
                         <div class="mb-3">
                             <label for="username" class="form- label">Username&nbsp;<span
                                     class="text-danger">*</span></label>
-                            <input [(ngModel)]="getuserforedit.username" class="form-control" name="Username" type="text" id="username">
+                            <input [(ngModel)]="getuserforedit.userName" class="form-control" name="Username"
+                                type="text" id="username">
                         </div>
 
                     </div>
                     <div class="form-check">
                         <input [(ngModel)]="getuserforedit.isActive" class="form-check-input" type="checkbox" value=""
-                            id="isActive" name="isActive" >
+                            id="isActive" name="isActive">
                         <label class="form-check-label" for="flexCheckDefault">
                             Active
                         </label>
                     </div>
                     <div class="form-check">
-                        <input [(ngModel)]="getuserforedit.lockoutEnabled" class="form-check-input" type="checkbox" name="lockoutEnabled" value=""
-                            id="lockoutEnabled" >
+                        <input [(ngModel)]="getuserforedit.lockoutEnabled" class="form-check-input" type="checkbox"
+                            name="lockoutEnabled" value="" id="lockoutEnabled">
                         <label class="form-check-label" for="flexCheckChecked">
                             Lock account after failed login attempts
                         </label>
@@ -106,7 +108,8 @@
 
                     <div class="form-group">
                         <label for="email">Email </label>&nbsp;<span class="text-danger">*</span>
-                        <input [(ngModel)]="getuserforedit.email" type="test" name="email" id="email" class="form-control " />
+                        <input [(ngModel)]="getuserforedit.email" type="test" name="email" id="email"
+                            class="form-control " />
                     </div>
 
                     <div class="form-group">
@@ -116,8 +119,8 @@
                                 <option [ngValue]="null">Select title</option>
                                 <option [ngValue]="type.value" *ngFor="let type of title"> {{ type.key }}</option>
                             </select>
-                            <input [(ngModel)]="getuserforedit.phoneNumber" type="text" name="phoneNumber" class="form-control" id="phoneNumber"
-                                aria-describedby="basic-addon3">
+                            <input [(ngModel)]="getuserforedit.phoneNumber" type="text" name="phoneNumber"
+                                class="form-control" id="phoneNumber" aria-describedby="basic-addon3">
                         </div>
                     </div>
                     <div class="form-check">
@@ -131,30 +134,37 @@
                         <div class="mb-3">
                             <label for="username" class="form- label">Password &nbsp;<span
                                     class="text-danger">*</span></label>
-                            <input [(ngModel)]="password" class="form-control" type="text" id="password" name="password">
+                            <input [(ngModel)]="password" class="form-control" type="text" id="password"
+                                name="password">
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form- label">Consfrm password&nbsp;<span
                                     class="text-danger">*</span></label>
-                            <input [(ngModel)]="confrmpassword" class="form-control" type="text"  name="confrmpassword" id="confrmpassword">
+                            <input [(ngModel)]="confrmpassword" class="form-control" type="text" name="confrmpassword"
+                                id="confrmpassword">
 
                         </div>
-                        <!-- <span class="alert alert-danger" role="alert" hidden>Comfrm password Not  match</span> -->
+                       
                     </div>
                 </div>
-                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                    Tab 2 content
+                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2" style="height: 20rem;">
+                    <div class="container mt-5">
+                        <select class="form-select" multiple aria-label="Default select example" [multiple]="true" [(ngModel)]="binding" name="binding" data-live-search="true">
+                          <option *ngFor="let item of dropdownList" [value]="item.item_id">{{item.item_text}}</option>
+                         
+                        </select>
+                      </div>
+
                 </div>
             </div>
 
         </ng-template>
         <ng-template #abpFooter>
-            <button type="button" class="btn btn-secondary" abpClose>
+            <button pButton type="button" label="Click" ></button>
+            <button type="button" class="btn btn-secondary" (click)="clearfild()" abpClose >
                 {{ '::Close' | abpLocalization }}
             </button>
-
-
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" type="submit" (click)="savedata()"  [disabled]="!templateVariableName.valid">
                 <i class="fa fa-check mr-1"></i>
                 {{ '::Save' | abpLocalization }}
             </button>

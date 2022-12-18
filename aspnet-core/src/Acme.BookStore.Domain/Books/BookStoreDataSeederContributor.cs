@@ -4,6 +4,7 @@ using Acme.BookStore.Books;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 
 namespace Acme.BookStore
 {
@@ -11,10 +12,12 @@ namespace Acme.BookStore
         : IDataSeedContributor, ITransientDependency
     {
         private readonly IRepository<Book, Guid> _bookRepository;
+        private readonly IRepository<IdentityRole, Guid> _rolesRepository;
 
-        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
+        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository, IRepository<IdentityRole, Guid> rolesRepository)
         {
             _bookRepository = bookRepository;
+            _rolesRepository = rolesRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -42,6 +45,37 @@ namespace Acme.BookStore
                     },
                     autoSave: true
                 );
+            }
+            if (await _rolesRepository.GetCountAsync() <= 1)
+            {
+                await _rolesRepository.InsertAsync(
+                    new IdentityRole(
+
+                         new Guid(),
+                         "user",
+                         null
+                        )
+                    {
+                        IsPublic = true,
+                        IsStatic = true,
+                    },
+                    autoSave:true);
+
+                await _rolesRepository.InsertAsync(
+                    new IdentityRole(
+
+                         new Guid(),
+                         "Accoutent",
+                         null
+                        )
+                    {
+                        IsPublic= true,
+                        IsStatic= true,
+                    },
+
+                    autoSave: true);
+
+
             }
         }
     }

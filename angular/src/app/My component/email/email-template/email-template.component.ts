@@ -21,9 +21,10 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
   savedata: EmailtemplateDTO 
   form: FormGroup;
   emaildata: EmailData
-  @ViewChild('id') element: ElementRef
+
   ngAfterViewInit(): void {
-    var abc = this.element
+  
+   
 
 
   }

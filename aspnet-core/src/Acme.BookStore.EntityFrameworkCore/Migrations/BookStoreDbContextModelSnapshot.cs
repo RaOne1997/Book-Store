@@ -1012,9 +1012,8 @@ namespace Acme.BookStore.Migrations
 
                     b.Property<int>("Title")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(3)
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(1);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .ValueGeneratedOnAdd()

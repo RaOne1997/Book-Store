@@ -1,4 +1,5 @@
-﻿using Acme.BookStore.ExtraProperty;
+﻿using Acme.BookStore.Books;
+using Acme.BookStore.ExtraProperty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -40,13 +41,17 @@ namespace Acme.BookStore.Identity
                 input.Email,
                 CurrentTenant.Id
             );
-           var abc= input.ExtraProperties.GetValueOrDefault("Profilepic");
-           var gender= input.ExtraProperties.GetValueOrDefault("Gender");
-           var title= input.ExtraProperties.GetValueOrDefault("Title");
+            var abc = input.ExtraProperties.GetValueOrDefault("Profilepic");
+            var gender = input.ExtraProperties.GetValueOrDefault("Gender");
+            var title = input.ExtraProperties.GetValueOrDefault("Title");
+            title = (Title)Enum.ToObject(typeof(Title), title);
 
-            byte[] bytes = System.Convert.FromBase64String(abc.ToString());
-            user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
-            user.SetProperty(UserConsts.TitlePropertyName,title );
+            if (abc != null)
+            {
+                byte[] bytes = System.Convert.FromBase64String(abc.ToString());
+                user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
+            }
+            user.SetProperty(UserConsts.TitlePropertyName, title);
             user.SetProperty(UserConsts.GenderPropertyName, gender);
             //input.MapExtraPropertiesTo(user);
 

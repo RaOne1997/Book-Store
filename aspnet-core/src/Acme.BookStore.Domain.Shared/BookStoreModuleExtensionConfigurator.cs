@@ -1,4 +1,5 @@
 ﻿
+using Acme.BookStore.Books;
 using Acme.BookStore.ExtraProperty;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Identity;
@@ -77,7 +78,7 @@ public static class BookStoreModuleExtensionConfigurator
         {
             identity.ConfigureUser(user =>
             {
-                user.AddOrUpdateProperty<string>(
+                user.AddOrUpdateProperty<Title>(
                     UserConsts.TitlePropertyName,
                     options =>
                     {
@@ -95,7 +96,7 @@ public static class BookStoreModuleExtensionConfigurator
                    UserConsts.profilephotoPropertyName,
                    options =>
                    {
-                       options.Attributes.Add(new RequiredAttribute());
+                       //options.Attributes.Add(new RequiredAttribute());
                    }
                );
 

@@ -1,4 +1,5 @@
 ﻿//using Acme.BookStore.Extraproperty;
+using Acme.BookStore.Books;
 using Acme.BookStore.ExtraProperty;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Identity;
@@ -19,11 +20,11 @@ public static class BookStoreEfCoreEntityExtensionMappings
         OneTimeRunner.Run(() =>
         {
 
-            ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, int>(
+            ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, Title>(
                 UserConsts.TitlePropertyName,
                 (entityBuilder, propertyBuilder) =>
                 {
-                    propertyBuilder.HasDefaultValue(0);
+                    propertyBuilder.HasDefaultValue(Title.Mr);
                     
                 }).MapEfCoreProperty<IdentityUser, char>(
                 UserConsts.GenderPropertyName,

@@ -8,6 +8,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+  isModalOpen=false
    abc :IdentityUserUpdateDto ={
     password: '',
     concurrencyStamp: '',
@@ -33,6 +34,12 @@ export class UsersComponent implements OnInit {
 
   };
   constructor(private IdentityUser: IdentityUserService) {
+
+
+  }
+  save(){
+    this.isModalOpen=true
+    console.log(this.isModalOpen)
 
 
   }

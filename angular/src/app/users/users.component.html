@@ -1,85 +1,74 @@
 <div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col col-md-6">
-                <h5 class="card-title">{{ '::Menu:Books' | abpLocalization }}</h5>
-            </div>
-            <div class="text-end col col-md-6">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ '::Menu:Books' | abpLocalization }}</h5>
+      </div>
+      <div class="text-end col col-md-6">
 
 
-                <div class="text-lg-end pt-2">
-                    <button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button"
-                     >
-                        <i class="fa fa-plus mr-1"></i>
-                        <span>{{ '::NewBook' | abpLocalization }}</span>
-                    </button>
-                </div>
-
-            </div>
+        <div class="text-lg-end pt-2">
+          <button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button"
+            (click)="editmodel.show('')">
+            <i class="fa fa-plus mr-1"></i>
+            <span>{{ '::NewBook' | abpLocalization }}</span>
+          </button>
         </div>
+
+      </div>
     </div>
-    <div class="card-body">
-         <table class="table align-middle mb-0 bg-white">
-            <thead class="bg-light">
-              <tr>
-                <th>Name</th>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Position</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody *ngFor="let user of Users.items" >
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img
-                        [src]="'data:application/jpg;base64,'+user.extraProperties.Profilepic"
-                        alt="sdff"
-                        style="width: 45px; height: 45px"
-                        class="rounded-circle"
-                        />
-                    <div class="ms-3">
-                      <p class="fw-bold mb-1">{{user.name}}</p>
-                      <p class="text-muted mb-0">{{user.email}}</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="fw-normal mb-1">Software engineer</p>
-                  <p class="text-muted mb-0">IT department</p>
-                </td>
-                <td>
-                  <span *ngIf="user.isActive" class="badge rounded-pill d-inline badge-success">Active</span>
-                  <span *ngIf="!user.isActive"  class="badge rounded-pill d-inline badge-danger">Not Active</span>
+  </div>
+  <div class="card-body">
+    <table class="table align-middle mb-0 bg-white">
+      <thead class="bg-light">
+        <tr>
+          <th>Name</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Position</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let user of Users.items">
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img [src]="'data:application/jpg;base64,'+user.extraProperties.Profilepic" alt="sdff"
+                style="width: 45px; height: 45px" class="rounded-circle" />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{user.name}}</p>
+                <p class="text-muted mb-0">{{user.email}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Software engineer</p>
+            <p class="text-muted mb-0">IT department</p>
+          </td>
+          <td>
+            <span *ngIf="user.isActive" class="badge rounded-pill d-inline badge-success">Active</span>
+            <span *ngIf="!user.isActive" class="badge rounded-pill d-inline badge-danger">Not Active</span>
 
-                </td>
-                <td>Senior</td>
-                <td>
-                    <div class="dropdown">
-                        <button
-                          class="btn btn-primary dropdown-toggle"
-                          type="button"
-                          id="dropdownMenuButton"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                        <i class="fas fa-cog"></i>  Action
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <li><a class="dropdown-item" (click)="edituser(user.id)">Action</a></li>
-                          <li><input type="file" name="" #myInput (change)="uploadFile3(myInput)"></li>
-                          <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                      </div>
-                </td>
-              </tr>
-
-
-            
-            </tbody>
-          </table> 
-      
+          </td>
+          <td>Senior</td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-mdb-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-cog"></i> Action
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" (click)="editmodel.show(user.id)"> {{ '::Edit' | abpLocalization }}</a>
+                </li>
+                <li><a class="dropdown-item"> {{ '::Delete' | abpLocalization }}</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <app-imagetest #editmodel> </app-imagetest>
     <!-- {{Users | json}}  -->
-    </div>
+  </div>
 </div>

@@ -23,6 +23,7 @@ import { UsersComponent } from '@abp/ng.identity';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    UsersModule,
     CoreModule.forRoot({
       environment,
       registerLocaleFn: registerLocale(),

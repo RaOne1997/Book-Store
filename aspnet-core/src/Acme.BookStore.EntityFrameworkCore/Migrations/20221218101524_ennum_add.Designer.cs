@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Acme.BookStore.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20221211184116_Added_Database_Module_71750")]
-    partial class Added_Database_Module_71750
+    [Migration("20221218101524_ennum_add")]
+    partial class ennum_add
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1014,9 +1014,8 @@ namespace Acme.BookStore.Migrations
 
                     b.Property<int>("Title")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(3)
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(1);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .ValueGeneratedOnAdd()

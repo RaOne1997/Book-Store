@@ -60,7 +60,7 @@
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" (click)="editmodel.show(user.id)"> {{ '::Edit' | abpLocalization }}</a>
                 </li>
-                <li><a class="dropdown-item"> {{ '::Delete' | abpLocalization }}</a></li>
+                <li><a class="dropdown-item" (click)="deleteuser(user.id)"> {{ '::Delete' | abpLocalization }}</a></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </div>

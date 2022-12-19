@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import {  RouterModule} from '@angular/router';
 
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DisplayLisComponent } from './display-lis/display-lis.component';
@@ -13,13 +14,15 @@ import { RazaPayComponent } from './raza-pay.component';
   declarations: [
     DisplayLisComponent,
     RazaPayComponent
+    
   ],
   imports: [
     CommonModule ,
     PaymentRoutingModule,
     SharedModule,
     RouterModule,
-    NgbDatepickerModule
+    NgbDatepickerModule,
+    NgxPaginationModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

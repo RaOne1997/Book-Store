@@ -123,14 +123,14 @@
                                 class="form-control" id="phoneNumber" aria-describedby="basic-addon3">
                         </div>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check" *ngIf="!UserID">
                         <input class="form-check-input" type="checkbox" [(ngModel)]="randompassword" value=""
                             name="randompassword" id="flexCheckChecked" checked>
                         <label class="form-check-label" for="flexCheckChecked">
                             Random Password
                         </label>
                     </div>
-                    <div [hidden]="randompassword">
+                    <div [hidden]="!UserID?randompassword:false">
                         <div class="mb-3">
                             <label for="username" class="form- label">Password &nbsp;<span
                                     class="text-danger">*</span></label>

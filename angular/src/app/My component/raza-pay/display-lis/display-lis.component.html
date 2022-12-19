@@ -10,7 +10,7 @@
       <th>{{'::Status' | abpLocalization }}</th>
     </tr>
   </thead>
-  <tbody *ngFor="let a  of _paymentdetails.items">
+  <tbody *ngFor="let a  of _paymentdetails.items | paginate: { itemsPerPage: 5, currentPage: p ,totalItems: _paymentdetails.count } ">
     <tr>
       <td>
         <p class=" mb-0">{{a.id}}</p>
@@ -62,6 +62,8 @@
 
   </tbody>
 </table>
+
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
 <div id="pageNavPosition" class="pager-nav"></div>
 
 <!-- <script src="PagerJS.js" defer></script> -->

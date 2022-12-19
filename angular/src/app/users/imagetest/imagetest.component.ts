@@ -6,6 +6,7 @@ import { TitleType, titleTypeOptions } from '@proxy/books';
 import { costumeIDenitytService } from '@proxy/identity';
 
 import { Inject } from '@angular/core';
+import { ConfirmationService } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-imagetest',
@@ -14,16 +15,19 @@ import { Inject } from '@angular/core';
 })
 export class ImagetestComponent implements OnInit, AfterViewInit {
   @Output() newItemEvent = new EventEmitter();
+  @ViewChild('myDiv') myDiv: ElementRef
+
+
   ngOnDestroy(): void {
     console.log('distory')
 
   }
-   possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst1234567890*&^%$#@!~";
-   lengthOfCode = 40;
+  possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst1234567890*&^%$#@!~";
+  lengthOfCode = 40;
   rolse: ListResultDto<IdentityRoleDto> = new ListResultDto<IdentityRoleDto>
   password: string;
   confrmpassword: string
-    getuserforedit: IdentityUserDto = {
+  getuserforedit: IdentityUserDto = {
     concurrencyStamp: "",
     creationTime: "",
     creatorId: null,
@@ -60,7 +64,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
 
 
   }
-  randompassword=true
+  randompassword = true
   dropdownList: role[] = [];
   createuser: IdentityUserCreateDto = {
     password: '',
@@ -80,7 +84,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   UserID: string
   title = titleTypeOptions
   constructor(private IdentityUser: costumeIDenitytService,
-
+    private confirmation: ConfirmationService,
     private identityrole: IdentityRoleService) {
 
 
@@ -92,14 +96,15 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
+    
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
 
   }
   ngOnInit(): void {
-   
 
-    this.getrolesfordropdown()
+    if (this.dropdownList == null)
+      this.getrolesfordropdown()
 
 
     console.log("oninit")
@@ -110,10 +115,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   binding: string[] = []
   savedata() {
     console.log(this.getuserforedit)
-    if(this.randompassword){
-     this.password =this.makeRandom(6,this.possible)
-    }
-
+  
     if (this.UserID == null)
       this.create();
     else
@@ -127,6 +129,11 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
         var abc = new role();
         abc.item_text = x.name
         abc.item_id = x.name
+        
+        if( this.dropdownList.length > this.rolse.items.length+1){
+          debugger
+          this.dropdownList=[]
+        }
         this.dropdownList.push(abc)
       })
     })
@@ -135,7 +142,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   upload(s) {
     const file = s?.target?.files[0];
 
-    const preview = document.getElementById('preview');
+    // const preview = document.getElementById('preview');
     const reader = new FileReader();
     let byteArray;
 
@@ -154,7 +161,11 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
     }
   }
   create() {
-    this.createuser.password =this.password
+    if (this.randompassword) {
+      this.password = this.makeRandom(6, this.possible)
+    }
+
+    this.createuser.password = this.password
     this.createuser.userName = this.getuserforedit.userName,
       this.createuser.name = this.getuserforedit.name,
       this.createuser.surname = this.getuserforedit.surname,
@@ -167,7 +178,11 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
       this.createuser.extraProperties.Profilepic = this.getuserforedit.extraProperties.Profilepic
     this.createuser.extraProperties.Title = this.getuserforedit.extraProperties.Title
     console.log(this.createuser)
-    this.IdentityUser.create(this.createuser).subscribe(rec => { this.isModalOpen = false, this.addNewItem(), this.clearfild() })
+    this.IdentityUser.create(this.createuser).subscribe(rec => { this.isModalOpen = false, this.addNewItem(),
+      
+      this.confirmation.success("save successfully",'record saved').forEach(x=>{x})
+      
+      this.clearfild() })
 
   }
   clearfild() {
@@ -186,9 +201,11 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
     this.UserID = null
 
   }
+
+
   update() {
 
-    this.abc.password = this.password
+    //this.abc.password = this.password
     this.abc.userName = this.getuserforedit.userName,
       this.abc.name = this.getuserforedit.name,
       this.abc.surname = this.getuserforedit.surname,
@@ -221,22 +238,25 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
           }
 
         )
-        this.getrolesfordropdown()
+      
+
+        
 
       })
     }
+    this.getrolesfordropdown()
     console.log(this.UserID)
     console.log(this.makeRandom(4, this.possible))
 
 
     this.isModalOpen = true
   }
-   makeRandom(lengthOfCode: number, possible: string) {
+  makeRandom(lengthOfCode: number, possible: string) {
     let text = "";
     for (let i = 0; i < lengthOfCode; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-      return text;
+    return text;
   }
 
 

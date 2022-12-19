@@ -21,6 +21,11 @@ export class RazaPayComponent implements OnInit {
     "description": "",
     "image": "",
     "order_id": "",
+    "prefill": {
+      "name": "",
+      "email": "",
+      "contact": ""
+    },
 
     "handler": (response) => {
       console.log(response)
@@ -67,10 +72,10 @@ export class RazaPayComponent implements OnInit {
 
     this.mode = {
       name: "Abhijeet",
-      mobile: "Abhijeet",
-      email: "Abhijeet",
+      mobile: "7057445611",
+      email: "Abhijeet@gmail.com",
       amount: 500,
-      notes:{"":""}
+      notes: { "": "" }
 
     }
     this.razerpay.getPaymentByRegistration(this.mode).subscribe({
@@ -83,7 +88,11 @@ export class RazaPayComponent implements OnInit {
         this.razorpayOptions.description = rec.description
         this.razorpayOptions.image = rec.imageLogUrl
         this.razorpayOptions.order_id = rec.orderId
+        this.razorpayOptions.prefill.name = rec.profileName
+        this.razorpayOptions.prefill.email = rec.profileEmail
+        this.razorpayOptions.prefill.contact = rec.profileContact
         this.razorpayOptions.handler = this.razorpayResponcehandler
+        console.log(this.razorpayOptions)
         var rzp1 = new Razorpay(this.razorpayOptions)
         rzp1.open();
         console.log("Opening")
@@ -92,7 +101,7 @@ export class RazaPayComponent implements OnInit {
 
   }
   razorpayResponcehandler(responce) {
-console.log(responce)
+    console.log(responce)
     this.returnrespe = responce
     this.returnrespe.paymentstatus
     window.location.replace("http://localhost:4200/books/callback")
@@ -112,7 +121,7 @@ console.log(responce)
   }
 
 
-  redirecttoall(){
+  redirecttoall() {
     this.route.navigate(['display']);
 
   }

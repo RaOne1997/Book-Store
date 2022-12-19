@@ -1,5 +1,6 @@
 import { ExtensibleObject, ListService, PagedResultDto } from '@abp/ng.core';
 import { GetIdentityUsersInput, IdentityUserDto, IdentityUserService, IdentityUserUpdateDto } from '@abp/ng.identity/proxy';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 @Component({
@@ -34,7 +35,8 @@ export class UsersComponent implements OnInit {
     maxResultCount: 200
 
   };
-  constructor(private IdentityUser: IdentityUserService, public readonly list: ListService,) {
+  constructor(private IdentityUser: IdentityUserService, private confirmation: ConfirmationService,
+    public readonly list: ListService,) {
 
 
   }
@@ -65,11 +67,14 @@ export class UsersComponent implements OnInit {
 
   }
   addItem() {
-   this.list.get()
+    this.list.get()
   }
-  edituser(userid) {
-    this.IdentityUser.get(userid).subscribe(rec => { console.log(rec) })
-
+  deleteuser(usedid) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.IdentityUser.delete(usedid).subscribe(() => this.list.get());
+      }
+    });
   }
 }
 

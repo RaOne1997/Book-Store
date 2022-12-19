@@ -85,7 +85,6 @@ export class BookComponent implements OnInit, OnDestroy {
 
 
   delete(id: string) {
-    debugger
     this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
       if (status === Confirmation.Status.confirm) {
         this.bookService.delete(id).subscribe(() => this.list.get());

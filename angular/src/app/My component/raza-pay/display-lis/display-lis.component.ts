@@ -11,7 +11,7 @@ import { ScriptService } from '../ScriptService';
   styleUrls: ['./display-lis.component.scss']
 })
 export class DisplayLisComponent implements OnInit {
-
+  p: number = 1;
   _paymentdetails: Paymentdetails={
     count: 0,
     items: []

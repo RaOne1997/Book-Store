@@ -90,7 +90,7 @@ namespace BOOKSTore.Razerpay
             try
             {
                 Dictionary<string, object> options = new Dictionary<string, object>();
-                options.Add("count", 50);
+                options.Add("count",int.MaxValue);
                 options.Add("skip", 0);
                 RazorpayClient client = new RazorpayClient(_key, _secret);
                 List<Razorpay.Api.Payment> result = client.Payment.All(options);

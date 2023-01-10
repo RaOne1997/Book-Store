@@ -9,6 +9,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 
 import {AccordionModule} from 'primeng/accordion';
 import {ButtonModule} from 'primeng/button';     //accordion and accordion tab
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import {ButtonModule} from 'primeng/button';     //accordion and accordion tab
   imports: [
     CommonModule,
     SharedModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    MultiSelectModule,
+    NgxPaginationModule
 
     
     

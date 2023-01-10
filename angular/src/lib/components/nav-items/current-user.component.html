@@ -3,8 +3,6 @@
     'AbpAccount::Login' | abpLocalization
     }}</a>
 </ng-template>
-
-
 <li class="nav-item" *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn" ngbDropdown
   #currentUserDropdown="ngbDropdown">
   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown"
@@ -13,7 +11,7 @@
       <i>{{ tenantName }}</i>
     </small>
     <!-- <strong>{{ (currentUser$ | async)?.userName }}</strong> -->
-    <img [src]="'data:application/jpg;base64,'+userdata?.extraProperties?.Profilepic"  height="30" width="30" alt="Avatar"
+    <img src="data:application/jpg;base64,{{this.userdata?.content}}"  height="30" width="30" alt="Avatar"
       loading="lazy" />
   </a>
   <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm me-3" aria-labelledby="dropdownMenuLink"

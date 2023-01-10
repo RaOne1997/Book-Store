@@ -6,7 +6,7 @@ import { EmailComponent } from './email.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { NgModule } from '@angular/core';
-
+import {EditorModule} from 'primeng/editor';
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import { NgModule } from '@angular/core';
   ],
   imports: [
     CommonModule,
-    EmailRoutingModule,SharedModule,
+    EmailRoutingModule,SharedModule,EditorModule
   
     
     

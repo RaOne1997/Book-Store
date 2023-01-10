@@ -1,8 +1,8 @@
 <abp-modal [(visible)]="isModalOpen">
-        <form #templateVariableName="ngForm" >
-    <ng-template #abpHeader>
-        <h3>{{ (this.UserID ? '::Edit' : '::NewBook' ) | abpLocalization }}</h3>
-    </ng-template>
+    <form #templateVariableName="ngForm">
+        <ng-template #abpHeader>
+            <h3>{{ (this.UserID ? '::Edit' : '::NewBook' ) | abpLocalization }}</h3>
+        </ng-template>
 
         <ng-template #abpBody>
             <ul class="nav nav-tabs mb-3 d-flex justify-content-center" id="ex1" role="tablist">
@@ -140,31 +140,32 @@
                         <div class="mb-3">
                             <label for="username" class="form- label">Consfrm password&nbsp;<span
                                     class="text-danger">*</span></label>
-                            <input [(ngModel)]="confrmpassword" class="form-control" type="text" name="confrmpassword"
-                                id="confrmpassword">
+                            <input [(ngModel)]="confrmpassword" class="form-control test" type="text"
+                                name="confrmpassword" id="confrmpassword">
 
                         </div>
-                       
+
                     </div>
                 </div>
-                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2" style="height: 20rem;">
+                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2"
+                    style="height: 20rem;">
                     <div class="container mt-5">
-                        <select class="form-select" multiple aria-label="Default select example" [multiple]="true" [(ngModel)]="binding" name="binding" data-live-search="true">
-                          <option *ngFor="let item of dropdownList" [value]="item.item_id">{{item.item_text}}</option>
-                         
-                        </select>
-                      </div>
+                        <p-multiSelect [options]="dropdownList" [(ngModel)]="binding" name="test"
+                            defaultLabel="Select a City" optionLabel="item_text" optionValue="item_text"
+                            [filter]="false" display="chip" [style]="{'width':'100%'}"
+                            class="mt-5 w-50"></p-multiSelect>
+                    </div>
 
                 </div>
             </div>
 
         </ng-template>
         <ng-template #abpFooter>
-            <button pButton type="button" label="Click" ></button>
-            <button type="button" class="btn btn-secondary" (click)="clearfild()" abpClose >
+            <button pButton type="button" label="Click"></button>
+            <button type="button" class="btn btn-secondary" (click)="clearfild()" abpClose>
                 {{ '::Close' | abpLocalization }}
             </button>
-            <button class="btn btn-primary" type="submit" (click)="savedata()"  [disabled]="!templateVariableName.valid">
+            <button class="btn btn-primary" type="submit" (click)="savedata()" [disabled]="!templateVariableName.valid">
                 <i class="fa fa-check mr-1"></i>
                 {{ '::Save' | abpLocalization }}
             </button>

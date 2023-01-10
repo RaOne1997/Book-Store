@@ -58,6 +58,17 @@ function configureRoutes(routesService: RoutesService) {
         layout: eLayoutType.application,
         // requiredPolicy: 'BookStore.Books',
       },
+
+      
+      {
+        path: '/boocking',
+        name: '::Menu:Boocking',
+       
+        layout: eLayoutType.application,
+        // requiredPolicy: 'BookStore.Books',
+      },
+
+      
       
        {
         path: '/Razerpay-payment',

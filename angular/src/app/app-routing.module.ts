@@ -34,6 +34,7 @@ const routes: Routes = [
 
   { path: 'Razerpay', loadChildren: () => import('./My component/raza-pay/Payment-modul').then(m => m.PaymentModule) },
   { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+  { path: 'boocking', loadChildren: () => import('./boocking/boocking.module').then(m => m.BoockingModule) },
   
 ];
 

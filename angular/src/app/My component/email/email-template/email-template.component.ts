@@ -21,7 +21,7 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
   savedata: EmailtemplateDTO 
   form: FormGroup;
   emaildata: EmailData
-
+  text: string;
   ngAfterViewInit(): void {
   
    
@@ -117,19 +117,19 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
 
 
 
-
+console.log(this.form.value)
     //  this.form.value.uplodeTemplateFile= this.Tempdata
-    this.savedata.isActive = this.form.value.isActive
-    this.savedata.uplodeTemplateFile = this.Tempdata
-    this.savedata.templateName = this.form.value.Templatename
-    this.savedata.templateType = this.form.value.TemplateTYpe
+    // this.savedata.isActive = this.form.value.isActive
+    // this.savedata.uplodeTemplateFile = this.Tempdata
+    // this.savedata.templateName = this.form.value.Templatename
+    // this.savedata.templateType = this.form.value.TemplateTYpe
 
-    console.log(this.savedata)
-    const formData: FormData = new FormData();
-    formData.append('uplodeTemplateFile', this.Tempdata);
-    formData.append('TemplateName', String(this.form.value.Templatename));
-    formData.append('TemplateType', String(this.form.value.TemplateTYpe));
-    formData.append('isActive', String(this.form.value.isActive));
+    // console.log(this.savedata)
+    // const formData: FormData = new FormData();
+    // formData.append('uplodeTemplateFile', this.Tempdata);
+    // formData.append('TemplateName', String(this.form.value.Templatename));
+    // formData.append('TemplateType', String(this.form.value.TemplateTYpe));
+    // formData.append('isActive', String(this.form.value.isActive));
 
 
     //  console.log(formData.get('templateName'))

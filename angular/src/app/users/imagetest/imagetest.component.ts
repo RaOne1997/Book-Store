@@ -2,11 +2,15 @@ import { ListResultDto } from '@abp/ng.core';
 import { IdentityRoleDto, IdentityRoleService, IdentityUserCreateDto, IdentityUserDto, IdentityUserService, IdentityUserUpdateDto } from '@abp/ng.identity/proxy';
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { TitleType, titleTypeOptions } from '@proxy/books';
+
 import { costumeIDenitytService } from '@proxy/identity';
 
 import { Inject } from '@angular/core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
+import { titleTypeOptions } from './TitleType';
+import { FileService } from '@proxy/blo-bstorage';
+import { SaveBlobInputDto } from '@proxy/blob-storage';
+import { DateTimeAdapter } from '@abp/ng.theme.shared/extensions';
 
 @Component({
   selector: 'app-imagetest',
@@ -64,6 +68,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
 
 
   }
+  imagesave = {} as SaveBlobInputDto
   randompassword = true
   dropdownList: role[] = [];
   createuser: IdentityUserCreateDto = {
@@ -85,7 +90,8 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   title = titleTypeOptions
   constructor(private IdentityUser: costumeIDenitytService,
     private confirmation: ConfirmationService,
-    private identityrole: IdentityRoleService) {
+    private identityrole: IdentityRoleService,
+    private blobstorage: FileService) {
 
 
 
@@ -93,19 +99,17 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   vac: any
 
     ;
+    Da:Date=new Date()
 
   ngAfterViewInit(): void {
 
-    
+
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
 
   }
   ngOnInit(): void {
-
-    if (this.dropdownList == null)
-      this.getrolesfordropdown()
-
+    this.getrolesfordropdown();
 
     console.log("oninit")
   }
@@ -115,13 +119,14 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
   binding: string[] = []
   savedata() {
     console.log(this.getuserforedit)
-  
+
     if (this.UserID == null)
       this.create();
     else
       this.update()
 
   }
+  data: role[] = []
 
   getrolesfordropdown() {
     this.identityrole.getAllList().subscribe(rec => {
@@ -129,11 +134,6 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
         var abc = new role();
         abc.item_text = x.name
         abc.item_id = x.name
-        
-        if( this.dropdownList.length > this.rolse.items.length+1){
-          debugger
-          this.dropdownList=[]
-        }
         this.dropdownList.push(abc)
       })
     })
@@ -164,7 +164,6 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
     if (this.randompassword) {
       this.password = this.makeRandom(6, this.possible)
     }
-
     this.createuser.password = this.password
     this.createuser.userName = this.getuserforedit.userName,
       this.createuser.name = this.getuserforedit.name,
@@ -177,12 +176,20 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
     this.createuser.extraProperties.Gender = this.getuserforedit.extraProperties.Gender,
       this.createuser.extraProperties.Profilepic = this.getuserforedit.extraProperties.Profilepic
     this.createuser.extraProperties.Title = this.getuserforedit.extraProperties.Title
-    console.log(this.createuser)
-    this.IdentityUser.create(this.createuser).subscribe(rec => { this.isModalOpen = false, this.addNewItem(),
-      
-      this.confirmation.success("save successfully",'record saved').forEach(x=>{x})
-      
-      this.clearfild() })
+    this.imagesave.name = this.getuserforedit.name
+    this.imagesave.content = this.getuserforedit.extraProperties.Profilepic
+    // this.blobstorage.saveBlob(this.imagesave).subscribe(rec=>{
+    //   this.isModalOpen = false, this.confirmation.success("save successfully", 'record saved to blob storage').forEach(x => { x }),
+    //   this.addNewItem()
+    // })
+    this.IdentityUser.create(this.createuser).subscribe(rec => {
+      this.isModalOpen = false, this.confirmation.success("save successfully", 'record saved').forEach(x => { x }),
+        this.addNewItem()
+
+
+
+      this.clearfild()
+    })
 
   }
   clearfild() {
@@ -192,9 +199,7 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
       this.getuserforedit.surname = null,
       this.getuserforedit.email = null,
       this.getuserforedit.phoneNumber = null,
-      this.getuserforedit.isActive = null,
-      this.getuserforedit.lockoutEnabled = null,
-      this.binding = null
+      this.binding = []
     this.getuserforedit.extraProperties.Gender = null,
       this.getuserforedit.extraProperties.Profilepic = null
     this.getuserforedit.extraProperties.Title = 0
@@ -236,15 +241,11 @@ export class ImagetestComponent implements OnInit, AfterViewInit {
             var an = roless.name
             this.binding.push(an)
           }
-
         )
-      
-
-        
-
       })
     }
-    this.getrolesfordropdown()
+    this.dropdownList = []
+    this.getrolesfordropdown();
     console.log(this.UserID)
     console.log(this.makeRandom(4, this.possible))
 

@@ -9,12 +9,3 @@ export enum TemplateType {
 }
 
 export const templateTypeOptions = mapEnumToOptions(TemplateType);
-
-
-export enum TitleType {
-  Mr = 1,
-  Ms = 2,
-  Mrs = 3,
-}
-
-export const titleTypeOptions = mapEnumToOptions(TitleType);

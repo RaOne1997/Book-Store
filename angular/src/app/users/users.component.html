@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table class="table align-middle mb-0 bg-white">
+    <table class="table align-middle mb-0 bg-white"  style="height: 20rem;">
       <thead class="bg-light">
         <tr>
           <th>Name</th>
@@ -29,8 +29,8 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody *ngFor="let user of Users.items">
-        <tr>
+      <tbody >
+        <tr *ngFor="let user of Users.items  | paginate: { itemsPerPage: 5, currentPage: p }">
           <td>
             <div class="d-flex align-items-center">
               <img [src]="'data:application/jpg;base64,'+user.extraProperties.Profilepic" alt="sdff"
@@ -61,14 +61,18 @@
                 <li><a class="dropdown-item" (click)="editmodel.show(user.id)"> {{ '::Edit' | abpLocalization }}</a>
                 </li>
                 <li><a class="dropdown-item" (click)="deleteuser(user.id)"> {{ '::Delete' | abpLocalization }}</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">Vi</a></li>
               </ul>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
     <app-imagetest (newItemEvent)="addItem()" #editmodel> </app-imagetest>
     <!-- {{Users | json}}  -->
+
   </div>
+  <!-- <iframe [src]="'data:application/pdf;base64,'+displaypdf" class="bg-danger" frameborder="0"></iframe>
+  {{"data:application/pdf;base64,{{displaypdf}}"|json}} -->
 </div>

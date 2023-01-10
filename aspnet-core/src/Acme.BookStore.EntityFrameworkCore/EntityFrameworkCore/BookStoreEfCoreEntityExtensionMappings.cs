@@ -35,13 +35,6 @@ public static class BookStoreEfCoreEntityExtensionMappings
                     entityBuilder.HasCheckConstraint("Check_Gender_Ck", $"{UserConsts.GenderPropertyName}='M' " +
                         $" or {UserConsts.GenderPropertyName} = 'F' " +
                         $"or {UserConsts.GenderPropertyName}= 'O'");
-                }).MapEfCoreProperty<IdentityUser, byte[]>(
-                UserConsts.profilephotoPropertyName,
-                (entityBuilder, propertyBuilder) =>
-                {
-                    propertyBuilder.HasDefaultValue(null);
-                    //propertyBuilder.HasMaxLength(1);
-                    
                 });
             /* You can configure extra properties for the
              * entities defined in the modules used by your application.

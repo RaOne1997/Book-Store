@@ -277,8 +277,7 @@ namespace Acme.BookStore.Migrations
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Gender = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false, defaultValue: "M"),
-                    Profilepic = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Title = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Title = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -314,6 +313,25 @@ namespace Acme.BookStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppBooks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppCurrencyCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CounteryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppCurrencyCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1052,6 +1070,9 @@ namespace Acme.BookStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppBooks");
+
+            migrationBuilder.DropTable(
+                name: "AppCurrencyCodes");
 
             migrationBuilder.DropTable(
                 name: "AppEmailConfigration");

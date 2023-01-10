@@ -15,6 +15,7 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.BlobStoring;
 
 
 namespace Acme.BookStore;
@@ -36,6 +37,7 @@ namespace Acme.BookStore;
 
 )]
 
+    [DependsOn(typeof(AbpBlobStoringModule))]
     public class BookStoreDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

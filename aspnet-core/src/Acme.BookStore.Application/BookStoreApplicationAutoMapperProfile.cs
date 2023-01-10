@@ -1,4 +1,6 @@
-﻿using Acme.BookStore.Books;
+﻿
+using Acme.BookStore.Books;
+
 using Acme.BookStore.Email;
 using Acme.BookStore.Emailsend;
 using AutoMapper;
@@ -19,7 +21,7 @@ public class BookStoreApplicationAutoMapperProfile : Profile
         CreateMap<EmailSettings, EmailSettingsDTO>().ReverseMap();
 
         CreateMap<EmployeeDetails, EmployeeDTO>().ReverseMap();
-        CreateMap<EmailtemplateDTO, Emailtemplate>().ReverseMap();
+      
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations
          * into multiple profile classes for a better organization. */

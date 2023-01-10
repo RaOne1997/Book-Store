@@ -19,6 +19,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Acme.BookStore.Currency_code;
 
 namespace Acme.BookStore.EntityFrameworkCore;
 
@@ -48,6 +49,11 @@ public class BookStoreDbContext :
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
+    public DbSet<CurrencyCodes> CurrencyCodes { get; set; }
+
+    
+
+
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
@@ -108,6 +114,20 @@ public class BookStoreDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
         });
+
+          builder.Entity<CurrencyCodes>(b =>
+        {
+            b.ToTable(BOOKSToreConsts.DbTablePrefix + "CurrencyCodes",
+                 BOOKSToreConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+           
+        });
+
+
+
+
+
+
 
         builder.Entity<Emailtemplate>(b =>
         {

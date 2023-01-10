@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acme.BookStore.BlobStorage;
+using Acme.BookStore.BloBStorage;
 using Acme.BookStore.Emailsend;
 using BOOKSTore.Email;
 using Emailsend;
@@ -37,7 +39,10 @@ public class Program
                 .UseSerilog();
             await builder.AddApplicationAsync<BookStoreHttpApiHostModule>();
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddScoped<IEmailServices, EmailService>();
+            builder.Services.AddScoped<IFileAppService, FileAppService>();
+
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();

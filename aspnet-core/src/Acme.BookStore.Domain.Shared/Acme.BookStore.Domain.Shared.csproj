@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Volo.Abp.BlobStoring" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.BlobStoring.Database.Domain.Shared" Version="6.0.1" />
     <PackageReference Include="Volo.Abp.Emailing" Version="6.0.1" />
     <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="6.0.1" />
@@ -30,6 +29,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cources\" />
+    <Folder Include="Programs\" />
   </ItemGroup>
 
 </Project>

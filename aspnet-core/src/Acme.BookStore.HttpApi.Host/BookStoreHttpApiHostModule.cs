@@ -239,6 +239,7 @@ public class BookStoreHttpApiHostModule : AbpModule
 
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
             c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            //c.OAuthClientSecret("1q2w3e*");
             c.OAuthScopes("BookStore");
         });
 

@@ -35,14 +35,16 @@ namespace Emailsend
             InputEmailConfigration>, IEmailServices
     {
         InputEmailConfigration _emailSettings = null;
+        EmailSettings _emailSettingsd = null;
         private readonly IRepository<EmailSettings, Guid> _repository;
         private readonly IRepository<Emailtemplate, Guid> _Emailtemplate;
         private readonly AppSettings templatepath;
-        public EmailService(IRepository<EmailSettings, Guid> repository, IOptions<AppSettings> settings, IRepository<Emailtemplate, Guid> Emailtemplate) : base(repository)
+        public EmailService(IRepository<EmailSettings, Guid> repository, IOptions<AppSettings> settings, IOptions<EmailSettings> emailsettings, IRepository<Emailtemplate, Guid> Emailtemplate) : base(repository)
         {
+            _emailSettingsd = emailsettings.Value;
             _repository = repository;
             templatepath = settings.Value;
-            _Emailtemplate= Emailtemplate;
+            _Emailtemplate = Emailtemplate;
         }
 
         public async Task<bool> TestSendEmailAsync(InputEmailConfigration emailData, string toemail)
@@ -64,23 +66,38 @@ namespace Emailsend
         {
             try
             {
-                if (_emailSettings == null)
+                _emailSettings = ObjectMapper.Map<EmailSettings, InputEmailConfigration>(await _repository.FirstOrDefaultAsync(x => x.EmailId.Equals("avarade85@gmail.com")));
+                if (emailData != null)
                 {
-
-                    _emailSettings = ObjectMapper.Map<EmailSettings, InputEmailConfigration>(await _repository.FirstOrDefaultAsync(x => x.EmailId.Equals("avarade85@gmail.com")));
+                    _emailSettings = new InputEmailConfigration
+                    {
+                        EmailId = _emailSettingsd.EmailId,
+                        Name = _emailSettingsd.Name,
+                        Password = _emailSettingsd.Password,
+                        Host = _emailSettingsd.Host,
+                        Port = _emailSettingsd.Port,
+                        UseSSL = _emailSettingsd.UseSSL,
+                    };
                 }
                 MimeMessage emailMessage = new MimeMessage();
                 MailboxAddress emailFrom = new MailboxAddress(_emailSettings.Name, _emailSettings.EmailId);
                 emailMessage.From.Add(emailFrom);
                 MailboxAddress emailTo = new MailboxAddress(emailData.EmailToName, emailData.EmailToId);
                 emailMessage.To.Add(emailTo);
-               
                 BodyBuilder emailBodyBuilder = new BodyBuilder();
                 if (emailData.IshtmlTemplet)
                 {
-                   var emaildata= await ReplaceDynamicDataAsync(emailData.EmailBody);
-                    emailMessage.Subject = emaildata.subject;
-                    emailMessage.Body = new TextPart("html") { Text = emaildata.body };
+                    var emaildata = await ReplaceDynamicDataAsync(emailData.EmailBody);
+                    if (emaildata == null)
+                    {
+                        emailMessage.Subject = emailData.EmailSubject;
+                        emailMessage.Body = new TextPart("html") { Text = emailData.EmailBody };
+                    }
+                    else
+                    {
+                        emailMessage.Subject = emaildata.subject;
+                        emailMessage.Body = new TextPart("html") { Text = emaildata.body };
+                    }
                 }
                 else
                 {
@@ -89,7 +106,6 @@ namespace Emailsend
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();
                 }
                 emailBodyBuilder.ToMessageBody();
-
                 SmtpClient emailClient = new SmtpClient();
                 await emailClient.ConnectAsync(_emailSettings.Host, _emailSettings.Port, _emailSettings.UseSSL);
                 await emailClient.AuthenticateAsync(_emailSettings.EmailId, _emailSettings.Password);
@@ -122,7 +138,7 @@ namespace Emailsend
 
         private async Task<EmailSendvalue> ReplaceDynamicDataAsync(string data)
         {
-            var template = await _Emailtemplate.FirstOrDefaultAsync(x=>x.IsActive == true && x.TemplateName == data);
+            var template = await _Emailtemplate.FirstOrDefaultAsync(x => x.IsActive == true && x.TemplateName == data);
             if (template != null)
             {
                 var streamss = new StreamReader(new MemoryStream(template.TempleteData));
@@ -146,7 +162,7 @@ namespace Emailsend
 
         }
 
-        public async Task<string> UploadFileAsync([FromForm]EmailtemplateDTO form)
+        public async Task<string> UploadFileAsync([FromForm] EmailtemplateDTO form)
         {
             try
             {
@@ -154,12 +170,12 @@ namespace Emailsend
 
 
                 using var memort = new MemoryStream();
-                form.uplodeTemplateFile. CopyTo(memort);
-                form.templeteData= memort.ToArray();
+                form.uplodeTemplateFile.CopyTo(memort);
+                form.templeteData = memort.ToArray();
 
                 var abc = ObjectMapper.Map<EmailtemplateDTO, Emailtemplate>(form);
 
-                 await _Emailtemplate.InsertAsync(abc);
+                await _Emailtemplate.InsertAsync(abc);
 
                 //var streamss = new StreamReader(new MemoryStream());
                 //var abc = await streamss.ReadToEndAsync();

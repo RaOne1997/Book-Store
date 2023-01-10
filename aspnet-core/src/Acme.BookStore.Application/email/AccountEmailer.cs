@@ -52,6 +52,7 @@ namespace BOOKSTore.email
             string returnUrl = null,
             string returnUrlHash = null)
         {
+
             Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
 
             var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
@@ -75,7 +76,14 @@ namespace BOOKSTore.email
             );
 
 
-            await _emailService.SendEmailAsync(new EmailData { EmailToName = user.Name, EmailSubject = "Forgot Password", EmailToId = user.Email, EmailBody = emailContent });
+            await _emailService.SendEmailAsync(new EmailData
+            {
+                IshtmlTemplet = true,
+                EmailToName = user.Name,
+                EmailSubject = "Forgot Password",
+                EmailToId = user.Email,
+                EmailBody = emailContent
+            });
 
             //await EmailSender.SendAsync(
             //    user.Email,

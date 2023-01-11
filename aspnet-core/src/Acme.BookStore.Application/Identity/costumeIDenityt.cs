@@ -144,8 +144,10 @@ namespace Acme.BookStore.Identity
             var userlist =new  List<IdentityUser>();
             foreach (var VARIABLE in list)
             {
-                
-                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName,  _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Name }).Result.Content);
+                var image = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Name });
+
+
+                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content!=null? image.Content:null );
                 userlist.Add(VARIABLE);
             }
 

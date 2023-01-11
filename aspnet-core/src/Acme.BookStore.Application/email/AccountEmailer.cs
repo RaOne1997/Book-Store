@@ -55,20 +55,24 @@ namespace BOOKSTore.email
 
             Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
 
-            var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
-
+            var url = "http://localhost:4200/identity/users/Conformpassword/";
+            var TenantId = user.TenantId != null ? user.TenantId : null;
             //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
+            var link = $"{url}{user.Id}/{TenantId}/{UrlEncoder.Default.Encode(resetToken)}";
+            //var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
 
-            if (!returnUrl.IsNullOrEmpty())
-            {
-                link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
-            }
+            ////TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+            //var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
 
-            if (!returnUrlHash.IsNullOrEmpty())
-            {
-                link += "&returnUrlHash=" + returnUrlHash;
-            }
+            //if (!returnUrl.IsNullOrEmpty())
+            //{
+            //    link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
+            //}
+
+            //if (!returnUrlHash.IsNullOrEmpty())
+            //{
+            //    link += "&returnUrlHash=" + returnUrlHash;
+            //}
 
             var emailContent = await TemplateRenderer.RenderAsync(
                 AccountEmailTemplates.PasswordResetLink,
@@ -82,7 +86,8 @@ namespace BOOKSTore.email
                 EmailToName = user.Name,
                 EmailSubject = "Forgot Password",
                 EmailToId = user.Email,
-                EmailBody = emailContent
+                EmailBody = emailContent,
+                redricturl= link
             });
 
             //await EmailSender.SendAsync(

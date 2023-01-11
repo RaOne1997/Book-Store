@@ -1,10 +1,13 @@
 <select (change)="changeFunction(id.value)" #id>
   <option *ngFor="let item of template" [value]="item.name">{{item.name}}</option>
 </select>
-
  <div [innerHTML]="test1==null?'hello':test1"></div> 
 <!-- <iframe [srcdoc]="test1==null?'hello':test1"></iframe> -->
 
+<div class="form-group">
+  <label for="uplodeTemplateFile">Template File</label><span> * </span>
+  <input type="file" id="uplodeTemplateFile" (change)="handleFileInput($event)" class="form-control"  />
+</div>
 <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
   <i class="fa fa-plus mr-1"></i>
   <span>{{ '::NewBook' | abpLocalization }}</span>
@@ -18,10 +21,12 @@
   
 
   <ng-template #abpBody>
-      <form [formGroup]="form" (ngSubmit)="save()">
+     <form #Emailtemplet="ngForm" (ngSubmit)="save()">
+        
+      <!-- </form> (ngSubmit)="save()"> -->
         <div class="form-group">
           <label for="Template-name">Template name</label><span> * </span>
-          <input type="text" id="Template-name" class="form-control" formControlName="Templatename" autofocus />
+          <input type="text" id="Template-name" class="form-control" [(ngModel)]="savedata.templateName" name="Templatename" autofocus />
         </div>
     
         <div class="form-group">
@@ -31,7 +36,7 @@
     
         <div class="form-group">
           <label for="TemplateTYpe">Template Type</label><span> * </span>
-          <select class="form-control" id="TemplateTYpe" formControlName="TemplateTYpe">
+          <select class="form-control" id="TemplateTYpe" [(ngModel)]="savedata.templateType" name="TemplateTYpe">
             <option [ngValue]="null">Select a book type</option>
             <option [ngValue]="type.value" *ngFor="let type of templatetype"> {{ type.key }}</option>
           </select>
@@ -43,7 +48,7 @@
             type="checkbox"
             class="form-check-input"
             name="isActive"
-            formControlName="isActive"
+            [(ngModel)]="savedata.isActive"
             
             
           />

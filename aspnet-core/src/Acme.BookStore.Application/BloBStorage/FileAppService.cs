@@ -36,14 +36,18 @@ namespace Acme.BookStore.BloBStorage
 
         public async Task<BlobDto> GetBlobAsync(GetBlobRequestDto input)
         {
-            
-            var blob = await _fileContainer.GetAllBytesAsync(input.Name);
-
-            return new BlobDto
+            if (await IsExist(input.Name))
             {
-                Name = input.Name,
-                Content = blob
-            };
+                var blob = await _fileContainer.GetAllBytesAsync(input.Name);
+
+                return new BlobDto
+                {
+                    Name = input.Name,
+                    Content = blob
+                };
+            }
+
+            return new BlobDto();
         }
 
         public async Task DeleteBlobAsync(string input)

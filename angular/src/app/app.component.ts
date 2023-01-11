@@ -23,10 +23,10 @@ constructor( private replaceableComponents: ReplaceableComponentsService,private
     key: eThemeBasicComponents.ApplicationLayout
   });
 
-  // this.replaceableComponents.add({
-  //   component: UsersComponent,
-  //   key: eIdentityComponents.Users
-  // });
+  this.replaceableComponents.add({
+    component: UsersComponent,
+    key: eIdentityComponents.Users
+  });
 
 
 }

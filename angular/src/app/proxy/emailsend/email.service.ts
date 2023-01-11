@@ -28,6 +28,16 @@ export class EmailService {
     { apiName: this.apiName });
   
 
+  displaytempletByFilename = (filename: string) =>
+    this.restService.request<any, string>({
+      method: 'POST',
+      responseType: 'text',
+      url: '/api/app/email/displaytemplet',
+      params: { filename },
+    },
+    { apiName: this.apiName });
+  
+
   get = (id: string) =>
     this.restService.request<any, EmailSettingsDTO>({
       method: 'GET',
@@ -86,6 +96,7 @@ export class EmailService {
       method: 'POST',
       responseType: 'text',
       url: '/api/app/email/upload-file',
+      body: form,
     },
     { apiName: this.apiName });
 

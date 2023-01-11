@@ -1,2 +1,3 @@
+import * as Account from './account';
 import * as Identity from './identity';
-export { Identity };
+export { Account, Identity };

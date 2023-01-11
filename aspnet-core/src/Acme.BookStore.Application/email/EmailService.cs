@@ -1,29 +1,21 @@
-﻿
-using Acme.BookStore.Books;
+﻿using Acme.BookStore.Books;
+using Acme.BookStore.Email;
 using Acme.BookStore.Emailsend;
-using BOOKSTore;
 using BOOKSTore.Email;
 using BOOKSTore.Email_send;
 using MailKit.Net.Smtp;
-using MailKit.Security;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
-using System.Net.Http;
-
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Microsoft.AspNetCore.Http;
-using Microsoft.VisualBasic.FileIO;
-using System.Collections;
-using System.Data;
-using Acme.BookStore.Email;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Emailsend
 {
@@ -87,7 +79,7 @@ namespace Emailsend
                 BodyBuilder emailBodyBuilder = new BodyBuilder();
                 if (emailData.IshtmlTemplet)
                 {
-                    var emaildata = await ReplaceDynamicDataAsync(emailData.EmailBody);
+                    var emaildata = await ReplaceDynamicDataAsync(emailData.EmailSubject,emailData.redricturl);
                     if (emaildata == null)
                     {
                         emailMessage.Subject = emailData.EmailSubject;
@@ -136,14 +128,14 @@ namespace Emailsend
 
         }
 
-        private async Task<EmailSendvalue> ReplaceDynamicDataAsync(string data)
+        private async Task<EmailSendvalue> ReplaceDynamicDataAsync(string data,string url)
         {
             var template = await _Emailtemplate.FirstOrDefaultAsync(x => x.IsActive == true && x.TemplateName == data);
             if (template != null)
             {
                 var streamss = new StreamReader(new MemoryStream(template.TempleteData));
                 var abc = await streamss.ReadToEndAsync();
-                return new EmailSendvalue { body = abc.Replace("{{resetURl}}", "https://www.google.com"), subject = template.Subject };
+                return new EmailSendvalue { body = abc.Replace("{{resetURl}}", url), subject = template.Subject };
             }
 
             return null;
@@ -152,7 +144,7 @@ namespace Emailsend
 
 
 
-        private string Displaytemplet(string filename)
+        public string Displaytemplet(string filename)
         {
             DirectoryInfo place = new DirectoryInfo(templatepath.path);
             FileInfo[] Files = place.GetFiles();
@@ -162,20 +154,21 @@ namespace Emailsend
 
         }
 
-        public async Task<string> UploadFileAsync([FromForm] EmailtemplateDTO form)
+        public async Task<string> UploadFileAsync(EmailtemplateDTO form)
         {
             try
             {
+                byte[] bytes = System.Convert.FromBase64String(form.TempletseData.ToString());
+                var abc = new Emailtemplate
+                {
+                    TempleteData = bytes,
+                    TemplateName = form.TemplateName,
+                    TemplateType = form.TemplateType,
+                    IsActive = form.isActive,
+                    Subject = form.TemplateName
 
-
-
-                using var memort = new MemoryStream();
-                form.uplodeTemplateFile.CopyTo(memort);
-                form.templeteData = memort.ToArray();
-
-                var abc = ObjectMapper.Map<EmailtemplateDTO, Emailtemplate>(form);
-
-                await _Emailtemplate.InsertAsync(abc);
+                };
+                 await _Emailtemplate.InsertAsync(abc);
 
                 //var streamss = new StreamReader(new MemoryStream());
                 //var abc = await streamss.ReadToEndAsync();

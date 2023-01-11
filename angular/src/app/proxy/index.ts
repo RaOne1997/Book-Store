@@ -6,6 +6,6 @@ import * as BulkeyBook from './bulkey-book';
 import * as Emailsend from './emailsend';
 import * as Identity from './identity';
 import * as InstamojoApi from './instamojo-api';
-import * as Microsoft from './microsoft';
+import * as Regrist from './regrist';
 import * as Volo from './volo';
-export { BloBstorage, BlobStorage, Books, Bookstore, BulkeyBook, Emailsend, Identity, InstamojoApi, Microsoft, Volo };
+export { BloBstorage, BlobStorage, Books, Bookstore, BulkeyBook, Emailsend, Identity, InstamojoApi, Regrist, Volo };

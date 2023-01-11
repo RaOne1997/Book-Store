@@ -18,7 +18,7 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
   isModalOpen = false;
   templatetype = templateTypeOptions;
   Tempdata: any
-  savedata: EmailtemplateDTO 
+  savedata={} as EmailtemplateDTO 
   form: FormGroup;
   emaildata: EmailData
   text: string;
@@ -28,28 +28,21 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
 
 
   }
-  constructor(private emservices: EmailService, private http: HttpClient,
+  constructor(private emservices: EmailService, private http: HttpClient,private sanitizer:DomSanitizer,
     private fb: FormBuilder,) {
 
   }
 
   createBook() {
-    this.buildForm(); // add this line
+    // add this line
     this.isModalOpen = true;
   }
-  buildForm() {
-    this.form = this.fb.group({
-      Templatename: ['', Validators.required],
-      // uplodeTemplateFile: [null, Validators.required],
-      subject: [null, Validators.required],
-      isActive: [null, Validators.required],
-      TemplateTYpe: [null, Validators.required]
-    });
-  }
+ 
+  
 
-  handleFileInput(e: any) {
-    this.Tempdata = e?.target?.files[0];
-  }
+  // handleFileInput(e: any) {
+  //   this.Tempdata = e?.target?.files[0];
+  // }
   ngOnInit(): void {
     // inits the collapsibel menus
     this.emservices.getAlltemplatename().subscribe(res => { this.template = res })
@@ -113,44 +106,63 @@ export class EmailTemplateComponent implements OnInit, AfterViewInit {
     // if (this.form.invalid) {
     //   return;
     // }
+    this.emservices.uploadFile(this.savedata).subscribe(rec=>{
+    console.log(rec)
+    })
 
 
 
-
-console.log(this.form.value)
-    //  this.form.value.uplodeTemplateFile= this.Tempdata
-    // this.savedata.isActive = this.form.value.isActive
-    // this.savedata.uplodeTemplateFile = this.Tempdata
-    // this.savedata.templateName = this.form.value.Templatename
-    // this.savedata.templateType = this.form.value.TemplateTYpe
-
-    // console.log(this.savedata)
-    // const formData: FormData = new FormData();
-    // formData.append('uplodeTemplateFile', this.Tempdata);
-    // formData.append('TemplateName', String(this.form.value.Templatename));
-    // formData.append('TemplateType', String(this.form.value.TemplateTYpe));
-    // formData.append('isActive', String(this.form.value.isActive));
-
-
-    //  console.log(formData.get('templateName'))
-
-
-
-
-    // var acb = this.emservices.Addroom(formData).subscribe((val) => { console.log(val) }
-    
-    
-    
-    // );
-    console.log()
+console.log(this.savedata)
+   
     this.isModalOpen = false;
-    this.form.reset();
+    // this.form.reset();
     // this.list.get();
 
   }
-  changeFunction(event) {
 
-    // this.emservices.displaytempletByFilename(event).subscribe(res =>{this.test1 = this.sanitizer.bypassSecurityTrustHtml(res);})
+
+vac:any;
+data:any;
+  handleFileInput(s) {
+    const file = s?.target?.files[0];
+
+    // const preview = document.getElementById('preview');
+    const reader = new FileReader();
+    let byteArray;
+
+    reader.onloadend = (e) => {
+      this.vac = reader.result;
+      if (this.vac != null) {
+        // console.log(this.vac)
+        var abcs = this.vac.indexOf(',')
+        
+        this.savedata.templetseData = this.vac.substring(abcs + 1)
+        // this.data =   this.dataURLtoBlob('data:text/plain;base64,'+this.savedata.templeteData)
+        //  console.log(this.data)
+      }
+
+    };
+
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
+   dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
+  changeFunction(event) {
+    console.log(event )
+
+    this.emservices.displaytempletByFilename(event).subscribe(res =>{this.test1 = this.sanitizer.bypassSecurityTrustHtml(res); 
+    
+   })
 
 
   }

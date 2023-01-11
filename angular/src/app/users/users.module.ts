@@ -10,11 +10,14 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {AccordionModule} from 'primeng/accordion';
 import {ButtonModule} from 'primeng/button';     //accordion and accordion tab
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ConformpasswordComponent } from './conformpassword/conformpassword.component';
 
 @NgModule({
   declarations: [
     UsersComponent,
     ImagetestComponent,
+   
+    ConformpasswordComponent,
   ],
   imports: [
     CommonModule,

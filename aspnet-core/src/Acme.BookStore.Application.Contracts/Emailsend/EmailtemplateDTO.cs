@@ -8,13 +8,11 @@ using System.Text;
 
 namespace Acme.BookStore.Emailsend
 {
-    public class EmailtemplateDTO 
+    public class EmailtemplateDTO
     {
-        public byte[]? templeteData { get; set; }
-        [Display(Name = "File")]
-        public IFormFile? uplodeTemplateFile { get; set; }
+        public string TempletseData { get; set; }
         public string TemplateName { get; set; }
-  
+
         public TemplateType TemplateType { get; set; }
         public bool isActive { get; set; }
     }
@@ -23,5 +21,5 @@ namespace Acme.BookStore.Emailsend
     {
         public string subject { get; set; }
         public string body { get; set; }
-        }
+    }
 }

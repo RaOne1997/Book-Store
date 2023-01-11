@@ -22,7 +22,7 @@ namespace Acme.BookStore.Identity
         }
 
        
-        public  async Task<IdentityUserDto> RegisterAsyncss(Regristrationdto input)
+        public  async Task<IdentityUserDto> RegistersAsyncss(Regristrationdto input)
         {
             //input.ExtraProperties["Gender"] = 'M';
             await CheckSelfRegistrationAsync().ConfigureAwait(continueOnCapturedContext: false);
@@ -36,7 +36,19 @@ namespace Acme.BookStore.Identity
             return base.ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
+        public  async Task ResetPasswordtestAsync(ResetPasswordDto input)
+        {
+            await IdentityOptions.SetAsync();
 
+            var user = await UserManager.GetByIdAsync(input.UserId);
+            (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.ChangePassword
+            });
+        }
 
         public override async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
         {

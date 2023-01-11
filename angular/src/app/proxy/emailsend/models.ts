@@ -1,5 +1,4 @@
 import type { AuditedEntityDto } from '@abp/ng.core';
-
 import type { TemplateType } from '../books/template-type.enum';
 
 export interface EmailData {
@@ -8,6 +7,7 @@ export interface EmailData {
   emailSubject?: string;
   emailBody?: string;
   ishtmlTemplet: boolean;
+  redricturl?: string;
 }
 
 export interface EmailSettingsDTO extends AuditedEntityDto<string> {
@@ -20,8 +20,7 @@ export interface EmailSettingsDTO extends AuditedEntityDto<string> {
 }
 
 export interface EmailtemplateDTO {
-  templeteData: number[];
-  uplodeTemplateFile: File;
+  templetseData?: string;
   templateName?: string;
   templateType: TemplateType;
   isActive: boolean;

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using Acme.BookStore.Books;
+using Acme.BookStore.FileActionsDemo;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -13,11 +17,15 @@ namespace Acme.BookStore
     {
         private readonly IRepository<Book, Guid> _bookRepository;
         private readonly IRepository<IdentityRole, Guid> _rolesRepository;
+        private readonly IBlobContainer<MyFileContainer> _fileContainer;
 
-        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository, IRepository<IdentityRole, Guid> rolesRepository)
+        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository,
+            IRepository<IdentityRole, Guid> rolesRepository,
+            IBlobContainer<MyFileContainer> fileContainer)
         {
             _bookRepository = bookRepository;
             _rolesRepository = rolesRepository;
+            _fileContainer = fileContainer;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -59,7 +67,7 @@ namespace Acme.BookStore
                         IsPublic = true,
                         IsStatic = true,
                     },
-                    autoSave:true);
+                    autoSave: true);
 
                 await _rolesRepository.InsertAsync(
                     new IdentityRole(
@@ -69,14 +77,35 @@ namespace Acme.BookStore
                          null
                         )
                     {
-                        IsPublic= true,
-                        IsStatic= true,
+                        IsPublic = true,
+                        IsStatic = true,
                     },
 
                     autoSave: true);
 
 
             }
+            
+            if (!await _fileContainer.ExistsAsync("Default"))
+            {
+                MemoryStream m;
+                byte[] imageBytes;
+                using (Image image = Image.FromFile(@"D:\abp io basic theme\aspnet-core\src\Acme.BookStore.HttpApi.Host\wwwroot\images\User-avatar.png"))
+                {
+                    using (m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        imageBytes = new byte[m.Length];
+                        //Very Important    
+                        imageBytes = m.ToArray();
+
+                    }//end using
+                }//e
+
+                await _fileContainer.SaveAsync("Default", imageBytes);
+            }
+
+
         }
     }
 }

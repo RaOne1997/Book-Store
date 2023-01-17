@@ -39,9 +39,10 @@ namespace Acme.BookStore.Identity
         public  async Task ResetPasswordtestAsync(ResetPasswordDto input)
         {
             await IdentityOptions.SetAsync();
+           
 
             var user = await UserManager.GetByIdAsync(input.UserId);
-            (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
+             (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
             {

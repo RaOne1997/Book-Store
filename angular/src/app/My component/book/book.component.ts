@@ -25,7 +25,7 @@ export class BookComponent implements OnInit, OnDestroy {
 
   form: FormGroup; // add this line
 
-  
+
   selectedBook = {} as BookDto; // declare selectedBook
   // add bookTypes as a list of BookType enum members
   bookTypes = bookTypeOptions;
@@ -35,17 +35,17 @@ export class BookComponent implements OnInit, OnDestroy {
   constructor(
     public readonly list: ListService,
     private bookService: BookService,
-    private payment :Payment_ServicesService,
+    private payment: Payment_ServicesService,
     private fb: FormBuilder, // inject FormBuilder
-    private confirmation: ConfirmationService, 
+    private confirmation: ConfirmationService,
     private RZPS: ScriptService
   ) {
-    
+
     // RZPS.loadCSS('MDB')
     // RZPS.load('MDBscriptr')
   }
   ngOnDestroy(): void {
-  console.log('distory')
+    console.log('distory')
 
   }
 
@@ -71,7 +71,7 @@ export class BookComponent implements OnInit, OnDestroy {
   }
 
 
-  
+
 
   // add buildForm method
   buildForm() {
@@ -87,16 +87,20 @@ export class BookComponent implements OnInit, OnDestroy {
   delete(id: string) {
     this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
       if (status === Confirmation.Status.confirm) {
-        this.bookService.delete(id).subscribe(() => this.list.get());
+        this.bookService.delete(id).subscribe(() =>
+          this.list.get());
       }
     });
   }
 
-  checkout(id){
-    console.log(id);  
+  checkout(id) {
+    console.log(id);
     debugger
-     this.payment.start(id).subscribe({next :(value)=>{ window.location.replace(value.returnUrl)}})
-     
+    this.payment.start(id).subscribe({
+      next: (value) => {
+        window.location.replace(value.returnUrl)
+      }
+    })
   }
 
   // add save method
@@ -104,7 +108,6 @@ export class BookComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-
     this.bookService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();

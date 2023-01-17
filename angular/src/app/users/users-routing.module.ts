@@ -4,7 +4,7 @@ import { ConformpasswordComponent } from './conformpassword/conformpassword.comp
 import { UsersComponent } from './users.component';
 
 const routes: Routes = [{ path: '', component: UsersComponent },
-{ path: 'identity/users/Conformpassword/:userId/:TenantId/:resetToken', component: ConformpasswordComponent }];
+{ path: 'identity/users/Conformpassword/:userId/:resetToken', component: ConformpasswordComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

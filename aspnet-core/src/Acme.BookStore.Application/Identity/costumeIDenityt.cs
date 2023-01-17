@@ -17,6 +17,9 @@ using Org.BouncyCastle.Utilities;
 using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using System.Reflection.Metadata;
 using static System.Reflection.Metadata.BlobBuilder;
+using Volo.Abp.Domain.Repositories;
+using Acme.BookStore.Employee;
+using Newtonsoft.Json.Serialization;
 
 namespace Acme.BookStore.Identity
 {
@@ -28,16 +31,21 @@ namespace Acme.BookStore.Identity
         protected IIdentityRoleRepository RoleRepository { get; }
         protected IFileAppService _fileAppService { get; }
         protected IOptions<IdentityOptions> IdentityOptions { get; }
+        private IRepository<IdentityUser,Guid> _IdentityUserRepository { get; }
         public costumeIDenityt(IdentityUserManager userManager, IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository, IOptions<IdentityOptions> identityOptions
-            , IFileAppService fileAppService)
+            , IFileAppService fileAppService,
+            IRepository<IdentityUser, Guid> IdentityUserRepository )
             : base(userManager, userRepository, roleRepository, identityOptions)
         {
             UserManager = userManager;
             RoleRepository = roleRepository;
             IdentityOptions = identityOptions;
             _fileAppService = fileAppService;
-            UserRepository = userRepository;    
+            UserRepository = userRepository;
+            _IdentityUserRepository = IdentityUserRepository;
+
+
         }
 
 
@@ -52,6 +60,8 @@ namespace Acme.BookStore.Identity
                 input.Email,
                 CurrentTenant.Id
             );
+                
+            
             var profileImage = input.ExtraProperties.GetValueOrDefault("Profilepic");
             var gender = input.ExtraProperties.GetValueOrDefault("Gender");
             var title = input.ExtraProperties.GetValueOrDefault("Title");
@@ -145,9 +155,9 @@ namespace Acme.BookStore.Identity
             foreach (var VARIABLE in list)
             {
                 var image = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Name });
+                var defaultImage = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
 
-
-                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content!=null? image.Content:null );
+                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content!=null? image.Content: defaultImage.Content);
                 userlist.Add(VARIABLE);
             }
 
@@ -158,6 +168,24 @@ namespace Acme.BookStore.Identity
 
             );
         }
+
+
+        public virtual async Task<PagedResultDto<UserData>> GetListAsyncsss(GetIdentityUsersInput input)
+        {
+            var user =await  _IdentityUserRepository.GetQueryableAsync();
+
+            var queary = (from a in user.ToList()
+                          select new UserData { Email=a.Email,
+                          Gender = a.GetProperty<char>("Gender"),
+                          Name = a.Name
+                          }).ToList();
+
+            return new PagedResultDto<UserData>(
+                0,
+               queary
+            );
+        }
+
 
     }
 }

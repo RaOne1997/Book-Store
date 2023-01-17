@@ -23,4 +23,11 @@ namespace BOOKSTore.Email
 
         public string path { get; set; }
     }
+    public class App
+    {
+        public string SelfUrl { get; set; }
+        public string ClientUrl { get; set; }
+        public string CorsOrigins { get; set; }
+        public string RedirectAllowedUrls { get; set; }
+    }
 }

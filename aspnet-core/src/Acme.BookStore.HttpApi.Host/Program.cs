@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Acme.BookStore.BlobStorage;
 using Acme.BookStore.BloBStorage;
 using Acme.BookStore.Emailsend;
+using Acme.BookStore.healperclass;
 using BOOKSTore.Email;
 using Emailsend;
 using Microsoft.AspNetCore.Builder;
@@ -40,8 +41,10 @@ public class Program
             await builder.AddApplicationAsync<BookStoreHttpApiHostModule>();
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.Configure<App>(builder.Configuration.GetSection("App"));
             builder.Services.AddScoped<IEmailServices, EmailService>();
             builder.Services.AddScoped<IFileAppService, FileAppService>();
+            builder.Services.AddScoped<IAppUrlProviders, AppUrlProviders>();
 
             var app = builder.Build();
             await app.InitializeApplicationAsync();

@@ -10,6 +10,7 @@ import { UserMenu, UserMenuService } from '@abp/ng.theme.shared';
 import { Component, Inject, OnInit, TrackByFunction } from '@angular/core';
 import { FileService } from '@proxy/blo-bstorage';
 import { BlobDto, GetBlobRequestDto } from '@proxy/blob-storage';
+import { Account } from '@proxy/volo/abp';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -36,6 +37,7 @@ export class CurrentUserComponent implements OnInit {
     private IdentityUser: IdentityUserService,
     private blobstorage: FileService,
     private sessionState: SessionStateService,
+  
   ) {
    
   }

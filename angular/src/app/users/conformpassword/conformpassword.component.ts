@@ -1,3 +1,4 @@
+import { ConfirmationService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { TestService } from '@proxy/identity';
@@ -13,7 +14,7 @@ export class ConformpasswordComponent implements OnInit {
   password2;
   parms:any
   input ={}as ResetPasswordDto;
-  constructor(private rot:ActivatedRoute,private TestServices :TestService) { }
+  constructor(private rot:ActivatedRoute,private TestServices :TestService,private confirmation: ConfirmationService,) { }
 
   ngOnInit(): void {
     this.rot.params.forEach(x=> {this.parms=x ;console.log(this.parms)})
@@ -25,6 +26,8 @@ export class ConformpasswordComponent implements OnInit {
     this.input.resetToken = this.parms["resetToken"]
     this.input.userId = this.parms["userId"]
     console.log(this.input)
-    this.TestServices.resetPasswordtest(this.input).forEach(x=>console.log(x))
+    this.TestServices.resetPasswordtest(this.input).subscribe((rec)=>{
+      this.confirmation.success("Password changes successfuly","Reset Password")
+    })
   }
 }

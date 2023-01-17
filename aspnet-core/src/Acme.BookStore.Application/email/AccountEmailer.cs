@@ -1,8 +1,11 @@
-﻿using Acme.BookStore.Emailsend;
+﻿using Acme.BookStore.Email;
+using Acme.BookStore.Emailsend;
+using Acme.BookStore.healperclass;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -16,6 +19,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.Domain.Repositories;
 
 namespace BOOKSTore.email
 {
@@ -26,8 +30,10 @@ namespace BOOKSTore.email
 
         protected IStringLocalizer<AccountResource> StringLocalizer { get; }
         protected IAppUrlProvider AppUrlProvider { get; }
+        protected IAppUrlProviders _AppUrlProviders { get; }
         protected ICurrentTenant CurrentTenant { get; }
         public readonly IEmailServices _emailService;
+        private readonly IRepository<Emailtemplate, Guid> _Emailtemplate;
 
         public AccountEmailer(
 
@@ -35,7 +41,9 @@ namespace BOOKSTore.email
             IStringLocalizer<AccountResource> stringLocalizer,
             IAppUrlProvider appUrlProvider,
             IEmailServices emailService,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IAppUrlProviders AppUrlProviders,
+            IRepository<Emailtemplate, Guid> Emailtemplate)
         {
 
             StringLocalizer = stringLocalizer;
@@ -43,6 +51,8 @@ namespace BOOKSTore.email
             CurrentTenant = currentTenant;
             TemplateRenderer = templateRenderer;
             _emailService = emailService;
+            _AppUrlProviders = AppUrlProviders;
+            _Emailtemplate = Emailtemplate;
         }
 
         public virtual async Task SendPasswordResetLinkAsync(
@@ -55,10 +65,10 @@ namespace BOOKSTore.email
 
             Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
 
-            var url = "http://localhost:4200/identity/users/Conformpassword/";
-            var TenantId = user.TenantId != null ? user.TenantId : null;
+            var url = await _AppUrlProviders.GetResetPasswordUrlAsync(appName);
+            var TenantId = user.TenantId != null ? user.TenantId : new Guid();
             //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            var link = $"{url}{user.Id}/{TenantId}/{UrlEncoder.Default.Encode(resetToken)}";
+            var link = $"{url}{user.Id}/{UrlEncoder.Default.Encode(resetToken)}";
             //var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
 
             ////TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
@@ -74,9 +84,8 @@ namespace BOOKSTore.email
             //    link += "&returnUrlHash=" + returnUrlHash;
             //}
 
-            var emailContent = await TemplateRenderer.RenderAsync(
-                AccountEmailTemplates.PasswordResetLink,
-                new { link = link }
+            var emailContent = await ReplaceDynamicDataAsync(
+                 "Forgot Password", link
             );
 
 
@@ -86,7 +95,7 @@ namespace BOOKSTore.email
                 EmailToName = user.Name,
                 EmailSubject = "Forgot Password",
                 EmailToId = user.Email,
-                EmailBody = emailContent,
+                EmailBody = emailContent.body,
                 redricturl= link
             });
 
@@ -127,5 +136,19 @@ namespace BOOKSTore.email
 
             return returnUrl;
         }
+        private async Task<EmailSendvalue> ReplaceDynamicDataAsync(string data, string url)
+        {
+            var template = await _Emailtemplate.FirstOrDefaultAsync(x => x.IsActive == true && x.TemplateName == data);
+            if (template != null)
+            {
+                var streamss = new StreamReader(new MemoryStream(template.TempleteData));
+                var abc = await streamss.ReadToEndAsync();
+                return new EmailSendvalue { body = abc.Replace("{{resetURl}}", url), subject = template.Subject };
+            }
+
+            return null;
+            //.Replace("{{action_url}}", "https://www.google.com").Replace("[Product Name]","YogaPoint");
+        }
+
     }
 }

@@ -79,17 +79,10 @@ namespace Emailsend
                 BodyBuilder emailBodyBuilder = new BodyBuilder();
                 if (emailData.IshtmlTemplet)
                 {
-                    var emaildata = await ReplaceDynamicDataAsync(emailData.EmailSubject,emailData.redricturl);
-                    if (emaildata == null)
-                    {
+                   
                         emailMessage.Subject = emailData.EmailSubject;
                         emailMessage.Body = new TextPart("html") { Text = emailData.EmailBody };
-                    }
-                    else
-                    {
-                        emailMessage.Subject = emaildata.subject;
-                        emailMessage.Body = new TextPart("html") { Text = emaildata.body };
-                    }
+                                      
                 }
                 else
                 {
@@ -128,20 +121,7 @@ namespace Emailsend
 
         }
 
-        private async Task<EmailSendvalue> ReplaceDynamicDataAsync(string data,string url)
-        {
-            var template = await _Emailtemplate.FirstOrDefaultAsync(x => x.IsActive == true && x.TemplateName == data);
-            if (template != null)
-            {
-                var streamss = new StreamReader(new MemoryStream(template.TempleteData));
-                var abc = await streamss.ReadToEndAsync();
-                return new EmailSendvalue { body = abc.Replace("{{resetURl}}", url), subject = template.Subject };
-            }
-
-            return null;
-            //.Replace("{{action_url}}", "https://www.google.com").Replace("[Product Name]","YogaPoint");
-        }
-
+       
 
 
         public string Displaytemplet(string filename)

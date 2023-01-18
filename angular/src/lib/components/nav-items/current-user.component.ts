@@ -48,7 +48,7 @@ export class CurrentUserComponent implements OnInit {
 
     displaydata() {
     
-    this.currentUser$.subscribe(rec=>{rec.id != null ?   (this.asd.name = rec.name,
+    this.currentUser$.subscribe(rec=>{rec.id != null ?   (this.asd.name = rec.email,
 
       this.blobstorage.getBlob(this.asd).forEach(x=>{this.userdata.content = x.content}))
 :null })

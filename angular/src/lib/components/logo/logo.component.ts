@@ -9,13 +9,13 @@ import { Component } from '@angular/core';
         *ngIf="appInfo.logoUrl; else appName"
         [src]="appInfo.logoUrl"
         [alt]="appInfo.name"
-        width="100%"
+        width="10%"
         height="auto"
       />
     </a>
 
     <ng-template #appName>
-      {{ appInfo.name }}HEllo
+      {{ appInfo.name }}
     </ng-template>
   `,
 })

@@ -26,12 +26,56 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
   rolse: ListResultDto<IdentityRoleDto> = new ListResultDto<IdentityRoleDto>
   password: string;
   confrmpassword: string
-  getuserforedit = {} as IdentityUserDto;
-  abc = {} as IdentityUserUpdateDto;
+  getuserforedit = {
+    concurrencyStamp: "",
+    creationTime: "",
+    creatorId: null,
+    deleterId: null,
+    deletionTime: null,
+    email: "",
+    emailConfirmed: false,
+    extraProperties: { Gender: '', Profilepic: null, Title: 0 },
+    id: "",
+    isActive: true,
+    isDeleted: false,
+    lastModificationTime: "",
+    lastModifierId: null,
+    lockoutEnabled: true,
+    lockoutEnd: null,
+    name: "",
+    phoneNumber: null,
+    phoneNumberConfirmed: false,
+    surname: null,
+    tenantId: null,
+    userName: ""
+  } as IdentityUserDto;
+  abc = {
+    password: '',
+    userName: '',
+    name: '',
+    surname: '',
+    email: '',
+    phoneNumber: '',
+    isActive: false,
+    lockoutEnabled: false,
+    roleNames: [],
+    extraProperties: { Gender: '', Title: 0, Profilepic: '' }
+  } as IdentityUserUpdateDto;
   imagesave = {} as SaveBlobInputDto
   randompassword = true
   dropdownList: role[] = [];
-  createuser = {} as IdentityUserCreateDto
+  createuser = {
+    password: '',
+    userName: '',
+    name: '',
+    surname: '',
+    email: '',
+    phoneNumber: '',
+    isActive: false,
+    lockoutEnabled: false,
+    roleNames: [],
+    extraProperties: { Gender: '', Title: 0, Profilepic: '' }
+  } as IdentityUserCreateDto
   isModalOpen = false
   UserID: string
   title = titleTypeOptions
@@ -92,25 +136,33 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
     }
     var User = this.ObjectMap<IdentityUserDto, IdentityUserCreateDto>(this.getuserforedit, this.createuser);
     User.password = this.password
-        this.IdentityUser.create(User).subscribe(rec => {
+    this.IdentityUser.create(User).subscribe(rec => {
       this.isModalOpen = false, this.confirmation.success("save successfully", 'record saved').forEach(x => { x }),
         this.addNewItem()
       this.clearfild()
     })
   }
   clearfild() {
-    this.getuserforedit={} as IdentityUserDto;
+    this.getuserforedit.userName = null,
+      this.getuserforedit.name = null,
+      this.getuserforedit.surname = null,
+      this.getuserforedit.email = null,
+      this.getuserforedit.phoneNumber = null,
+
+      this.getuserforedit.extraProperties.Gender = null,
+      this.getuserforedit.extraProperties.Profilepic = null
+    this.getuserforedit.extraProperties.Title = 0
     this.binding = [];
     this.UserID = null;
   }
 
   update() {
-     var User = this.ObjectMap<IdentityUserDto, IdentityUserUpdateDto>(this.getuserforedit, this.abc);
+    var User = this.ObjectMap<IdentityUserDto, IdentityUserUpdateDto>(this.getuserforedit, this.abc);
     console.log(User)
-     this.IdentityUser.update(this.UserID, User).subscribe(rec => { this.isModalOpen = false, this.addNewItem(), this.clearfild() })
+    this.IdentityUser.update(this.UserID, User).subscribe(rec => { this.isModalOpen = false, this.addNewItem(), this.clearfild() })
   }
 
-  
+
   show(UserID = null) {
     this.UserID = UserID
     if (UserID != null) {

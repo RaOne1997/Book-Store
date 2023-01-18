@@ -72,11 +72,22 @@ namespace Acme.BookStore.Identity
                 var bac = new SaveBlobInputDto
                 {
                     Content = profileImage.ToString(),
-                    Name = input.Name
+                    Name = input.Email
                 };
                await _fileAppService.SaveBlobAsync(bac);
                 //byte[] bytes = System.Convert.FromBase64String(abc.ToString());
                 //user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
+            }
+            else
+            {
+                var acb = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
+                var bac = new SaveBlobInputDto
+                {
+                   
+                    Content =  Convert.ToBase64String(acb.Content),
+                    Name = input.Email
+                };
+                await _fileAppService.SaveBlobAsync(bac);
             }
             user.SetProperty(UserConsts.TitlePropertyName, title);
             user.SetProperty(UserConsts.GenderPropertyName, gender);
@@ -154,7 +165,7 @@ namespace Acme.BookStore.Identity
             var userlist =new  List<IdentityUser>();
             foreach (var VARIABLE in list)
             {
-                var image = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Name });
+                var image = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Email });
                 var defaultImage = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
 
                 VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content!=null? image.Content: defaultImage.Content);

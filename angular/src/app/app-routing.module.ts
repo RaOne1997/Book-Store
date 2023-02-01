@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ClassbackComponent } from './My component/classback/classback.component';
+import { ConformpasswordComponent } from './users/conformpassword/conformpassword.component';
 
 const routes: Routes = [
+  { path: 'Conformpassword', component: ConformpasswordComponent,},
   {
     path: '',
     pathMatch: 'full',
@@ -35,7 +37,7 @@ const routes: Routes = [
   { path: 'Razerpay', loadChildren: () => import('./My component/raza-pay/Payment-modul').then(m => m.PaymentModule) },
   { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
   { path: 'boocking', loadChildren: () => import('./boocking/boocking.module').then(m => m.BoockingModule) },
-  
+  { path: 'Conformpassword', component: ConformpasswordComponent,}
 ];
 
 @NgModule({

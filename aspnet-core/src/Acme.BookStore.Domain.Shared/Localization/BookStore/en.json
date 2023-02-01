@@ -9,7 +9,7 @@
     "Menu:Books": "Books",
     "Menu:Email": "Email Setting",
     "Menu:EmailConfigration": "Email Configration",
-    "Menu:EmailTemplate":"Email Templater",
+    "Menu:EmailTemplate": "Email Templater",
 
     "PaymentId": "PaymentId",
     "OrderId": "Razorpay Order Id",
@@ -49,6 +49,11 @@
     "Permission:Books": "Book Management",
     "Permission:Books.Create": "Creating new books",
     "Permission:Books.Edit": "Editing the books",
-    "Permission:Books.Delete": "Deleting the books"
+    "Permission:Books.Delete": "Deleting the books",
+
+    "Permission:Product": "Product Management",
+    "Permission:product.Create": "Creating new Product",
+    "Permission:product.Edit": "Editing the Product",
+    "Permission:product.Delete": "Deleting the Product"
   }
 }

@@ -99,7 +99,7 @@ public class BookStoreHttpApiHostModule : AbpModule
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
 
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
+            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-passwords";
         });
     }
 

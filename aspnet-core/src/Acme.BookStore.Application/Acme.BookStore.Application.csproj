@@ -18,7 +18,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="MimeKit" Version="3.4.3" />
+    <PackageReference Include="PayPal" Version="1.9.1" />
+    <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
     <PackageReference Include="Volo.Abp.Account.Application" Version="6.0.1" />
     <PackageReference Include="Volo.Abp.BlobStoring" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.Emailing" Version="6.0.1" />

@@ -17,6 +17,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
 import { NavbarwithsideComponent } from './navbarwithside/navbarwithside.component';
 import { UsersModule } from './users/users.module';
 import { UsersComponent } from '@abp/ng.identity';
+import { ConformpasswordComponent } from './users/conformpassword/conformpassword.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,7 @@ import { UsersComponent } from '@abp/ng.identity';
     // ThemeBasicModule.forRoot(),
     ThemeBasicModule.forRoot()
   ],
-  declarations: [AppComponent, NavbarwithsideComponent],
+  declarations: [AppComponent, NavbarwithsideComponent,ConformpasswordComponent],
   providers: [APP_ROUTE_PROVIDER],
   bootstrap: [AppComponent],
 })

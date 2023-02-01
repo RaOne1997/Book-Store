@@ -8,18 +8,20 @@ import { COstumnavbar } from './navbarcomponent/navbar-component';
 import { NavbarwithsideComponent } from './navbarwithside/navbarwithside.component';
 import { UsersComponent } from './users/users.component';
 import { PrimeNGConfig } from 'primeng/api';
+import { eAccountComponents } from '@abp/ng.account';
 @Component({
   selector: 'app-root',
   template: `
     <abp-loader-bar></abp-loader-bar>
     <abp-dynamic-layout></abp-dynamic-layout>
+    
   `,
 })
 export class AppComponent implements OnInit {
 
 constructor( private replaceableComponents: ReplaceableComponentsService,private primengConfig: PrimeNGConfig){
   this.replaceableComponents.add({
-    component: COstumnavbar,
+    component: NavbarwithsideComponent,
     key: eThemeBasicComponents.ApplicationLayout
   });
 
@@ -27,7 +29,10 @@ constructor( private replaceableComponents: ReplaceableComponentsService,private
     component: UsersComponent,
     key: eIdentityComponents.Users
   });
-
+  this.replaceableComponents.add({
+    component: UsersComponent,
+    key: eAccountComponents.Login 
+  });
 
 }
 ngOnInit() {

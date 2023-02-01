@@ -29,7 +29,7 @@ namespace BOOKSTore.Razerpay
         }
         public RazorPayOptionsModel GetPayment(RegistrationModel registration)
         {
-            OrderModel order = new OrderModel()
+            var order = new OrderModel()
             {
                 OrderAmount = registration.Amount,
                 Currency = "INR",
@@ -43,7 +43,7 @@ namespace BOOKSTore.Razerpay
 
             var orderId = CreateOrder(order);
 
-            RazorPayOptionsModel razorPayOptions = new RazorPayOptionsModel()
+            var razorPayOptions = new RazorPayOptionsModel()
             {
                 Key = _key,
                 AmountInSubUnits = order.OrderAmountInSubUnits,
@@ -67,19 +67,21 @@ namespace BOOKSTore.Razerpay
         {
             try
             {
-                RazorpayClient client = new RazorpayClient(_key, _secret);
-                Dictionary<string, object> options = new Dictionary<string, object>();
-                options.Add("amount", order.OrderAmountInSubUnits);
-                options.Add("currency", order.Currency);
-                options.Add("payment_capture", order.Payment_Capture);
-                options.Add("notes", order.Notes);
-                options.Add("receipt", "recpt_442244sqw5");
+                var client = new RazorpayClient(_key, _secret);
+                var options = new Dictionary<string, object>
+                {
+                    { "amount", order.OrderAmountInSubUnits },
+                    { "currency", order.Currency },
+                    { "payment_capture", order.Payment_Capture },
+                    { "notes", order.Notes },
+                    { "receipt", "recpt_442244sqw5" }
+                };
                 var abc = client.Payment.All();
                 Order orderResponse = client.Order.Create(options);
                 var orderId = orderResponse.Attributes["id"].ToString();
                 return orderId;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -89,10 +91,12 @@ namespace BOOKSTore.Razerpay
         {
             try
             {
-                Dictionary<string, object> options = new Dictionary<string, object>();
-                options.Add("count",int.MaxValue);
-                options.Add("skip", 0);
-                RazorpayClient client = new RazorpayClient(_key, _secret);
+                var options = new Dictionary<string, object>
+                {
+                    { "count", int.MaxValue },
+                    { "skip", 0 }
+                };
+                var client = new RazorpayClient(_key, _secret);
                 List<Razorpay.Api.Payment> result = client.Payment.All(options);
 
 
@@ -126,7 +130,7 @@ namespace BOOKSTore.Razerpay
                 //Add(ObjectExtensions.ToObject<Items>(x.Attributes))
                 return new Paymentdetails { count = result.Count(), items = abc };
             }
-            catch (Exception ex)
+            catch (Exception)   
             {
                 return null;
             }
@@ -137,9 +141,11 @@ namespace BOOKSTore.Razerpay
             try
             {
                 Razorpay.Api.Payment payment = client.Payment.Fetch(paymentId);
-                Dictionary<string, object> data = new Dictionary<string, object>();
-                data.Add("amount", payment.Attributes["amount"]);
-                data.Add("notes", refundData.notes);
+                var data = new Dictionary<string, object>
+                {
+                    { "amount", payment.Attributes["amount"] },
+                    { "notes", refundData.notes }
+                };
                 Refund refund = payment.Refund(data);
                 var result = new RefundReSopnce();
 
@@ -163,7 +169,7 @@ namespace BOOKSTore.Razerpay
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -172,9 +178,11 @@ namespace BOOKSTore.Razerpay
         public RefundReSopnce PartialRefund(string paymentId, RefundData refundData)
         {
             Razorpay.Api.Payment payment = client.Payment.Fetch(paymentId);
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("amount", refundData.amount);
-            data.Add("notes", refundData.notes);
+            var data = new Dictionary<string, object>
+            {
+                { "amount", refundData.amount },
+                { "notes", refundData.notes }
+            };
             Refund refunds = payment.Refund(data);
             RefundReSopnce abc = ObjectExtensions.ToObject<RefundReSopnce>(refunds.Attributes);
             return abc;

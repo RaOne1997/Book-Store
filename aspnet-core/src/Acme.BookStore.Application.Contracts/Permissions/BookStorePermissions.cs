@@ -13,4 +13,14 @@ public static class BookStorePermissions
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
     }
+
+
+    public static class Products
+    {
+        public const string Default = GroupName + ".Product";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+        public const string AllowExalDownload = Default + ".AllowExalDownload";
+    }
 }

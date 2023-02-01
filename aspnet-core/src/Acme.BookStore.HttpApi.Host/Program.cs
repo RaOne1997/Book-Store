@@ -4,6 +4,8 @@ using Acme.BookStore.BlobStorage;
 using Acme.BookStore.BloBStorage;
 using Acme.BookStore.Emailsend;
 using Acme.BookStore.healperclass;
+using Acme.BookStore.Identity;
+using Acme.BookStore.Regrist;
 using BOOKSTore.Email;
 using Emailsend;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +47,7 @@ public class Program
             builder.Services.AddScoped<IEmailServices, EmailService>();
             builder.Services.AddScoped<IFileAppService, FileAppService>();
             builder.Services.AddScoped<IAppUrlProviders, AppUrlProviders>();
+            builder.Services.AddTransient<ICustomerIdentity, CostumeIDenityt>();
 
             var app = builder.Build();
             await app.InitializeApplicationAsync();

@@ -65,14 +65,13 @@ namespace BOOKSTore.email
 
             Debug.Assert(CurrentTenant.Id == user.TenantId, "This method can only work for current tenant!");
 
-            var url = await _AppUrlProviders.GetResetPasswordUrlAsync(appName);
+            var url =  _AppUrlProviders.GetResetPasswordUrl(appName);
             var TenantId = user.TenantId != null ? user.TenantId : new Guid();
             //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            var link = $"{url}{user.Id}/{UrlEncoder.Default.Encode(resetToken)}";
-            //var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
+           // var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
 
             ////TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-            //var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
+            var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
 
             //if (!returnUrl.IsNullOrEmpty())
             //{

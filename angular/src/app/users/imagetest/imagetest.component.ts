@@ -3,7 +3,7 @@ import { IdentityRoleDto, IdentityRoleService, IdentityUserCreateDto, IdentityUs
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
-import { costumeIDenitytService } from '@proxy/identity';
+import { CostumeIDenitytService } from '@proxy/identity';
 
 import { Inject } from '@angular/core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
@@ -82,7 +82,8 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
   data: role[] = []
   vac: any
   Da: Date = new Date()
-  constructor(private IdentityUser: costumeIDenitytService,
+  constructor(private IdentityUser: IdentityUserService,
+    private IdentityUsers: CostumeIDenitytService,
     private confirmation: ConfirmationService,
     private identityrole: IdentityRoleService,
     private blobstorage: FileService) {
@@ -131,12 +132,14 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
   }
 
   create() {
+    debugger
     if (this.randompassword) {
       this.password = this.makeRandom(6, this.possible)
     }
     var User = this.ObjectMap<IdentityUserDto, IdentityUserCreateDto>(this.getuserforedit, this.createuser);
     User.password = this.password
-    this.IdentityUser.create(User).subscribe(rec => {
+    User.roleNames = this.binding
+    this.IdentityUsers.create(User).subscribe(rec => {
       this.isModalOpen = false, this.confirmation.success("save successfully", 'record saved').forEach(x => { x }),
         this.addNewItem()
       this.clearfild()
@@ -157,9 +160,11 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
   }
 
   update() {
+    debugger
     var User = this.ObjectMap<IdentityUserDto, IdentityUserUpdateDto>(this.getuserforedit, this.abc);
+    User.roleNames = this.binding
     console.log(User)
-    this.IdentityUser.update(this.UserID, User).subscribe(rec => { this.isModalOpen = false, this.addNewItem(), this.clearfild() })
+    this.IdentityUsers.update(this.UserID, User).subscribe(rec => { this.isModalOpen = false, this.addNewItem(), this.clearfild() })
   }
 
 

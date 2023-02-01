@@ -6,6 +6,6 @@ namespace Acme.BookStore.UrlConst
 {
     public  class UrlConstclasss
     {
-        public const string Angular = "/identity/users/Conformpassword/";
+        public const string Angular = "Conformpassword/";
     }
 }

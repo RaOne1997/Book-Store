@@ -17,7 +17,7 @@ import { ConformpasswordComponent } from './conformpassword/conformpassword.comp
     UsersComponent,
     ImagetestComponent,
    
-    ConformpasswordComponent,
+    
   ],
   imports: [
     CommonModule,

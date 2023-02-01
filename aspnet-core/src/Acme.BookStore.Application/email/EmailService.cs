@@ -27,7 +27,7 @@ namespace Emailsend
             InputEmailConfigration>, IEmailServices
     {
         InputEmailConfigration _emailSettings = null;
-        EmailSettings _emailSettingsd = null;
+        private readonly EmailSettings _emailSettingsd = null;
         private readonly IRepository<EmailSettings, Guid> _repository;
         private readonly IRepository<Emailtemplate, Guid> _Emailtemplate;
         private readonly AppSettings templatepath;
@@ -71,12 +71,12 @@ namespace Emailsend
                         UseSSL = _emailSettingsd.UseSSL,
                     };
                 }
-                MimeMessage emailMessage = new MimeMessage();
-                MailboxAddress emailFrom = new MailboxAddress(_emailSettings.Name, _emailSettings.EmailId);
+                var emailMessage = new MimeMessage();
+                var emailFrom = new MailboxAddress(_emailSettings.Name, _emailSettings.EmailId);
                 emailMessage.From.Add(emailFrom);
-                MailboxAddress emailTo = new MailboxAddress(emailData.EmailToName, emailData.EmailToId);
+                var emailTo = new MailboxAddress(emailData.EmailToName, emailData.EmailToId);
                 emailMessage.To.Add(emailTo);
-                BodyBuilder emailBodyBuilder = new BodyBuilder();
+                var emailBodyBuilder = new BodyBuilder();
                 if (emailData.IshtmlTemplet)
                 {
                    
@@ -91,7 +91,7 @@ namespace Emailsend
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();
                 }
                 emailBodyBuilder.ToMessageBody();
-                SmtpClient emailClient = new SmtpClient();
+                var emailClient = new SmtpClient();
                 await emailClient.ConnectAsync(_emailSettings.Host, _emailSettings.Port, _emailSettings.UseSSL);
                 await emailClient.AuthenticateAsync(_emailSettings.EmailId, _emailSettings.Password);
                 await emailClient.SendAsync(emailMessage);
@@ -100,7 +100,7 @@ namespace Emailsend
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -108,7 +108,7 @@ namespace Emailsend
 
         public List<Templatename> GetAlltemplatename()
         {
-            DirectoryInfo place = new DirectoryInfo(templatepath.path);
+            var place = new DirectoryInfo(templatepath.path);
             FileInfo[] Files = place.GetFiles("*.tpl");
 
             return Files.Select(x => new Templatename
@@ -126,7 +126,7 @@ namespace Emailsend
 
         public string Displaytemplet(string filename)
         {
-            DirectoryInfo place = new DirectoryInfo(templatepath.path);
+            var place = new DirectoryInfo(templatepath.path);
             FileInfo[] Files = place.GetFiles();
 
             return File.ReadAllText($"{templatepath.path}{filename}.tpl");

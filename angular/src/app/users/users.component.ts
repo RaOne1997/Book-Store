@@ -1,11 +1,11 @@
-import { ExtensibleObject, ListService, PagedResultDto } from '@abp/ng.core';
-import { GetIdentityUsersInput, IdentityUserDto, IdentityUserService, IdentityUserUpdateDto } from '@abp/ng.identity/proxy';
+import { ExtensibleObject, ListService, PagedResultDto} from '@abp/ng.core';
+import { GetIdentityUsersInput, IdentityUserDto, IdentityUserService, IdentityUserUpdateDto, UserData } from '@abp/ng.identity/proxy';
 import { CurrentUserComponent } from '@abp/ng.theme.basic';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FileService } from '@proxy/blo-bstorage';
 import { GetBlobRequestDto } from '@proxy/blob-storage';
-import { costumeIDenitytService } from '@proxy/identity';
+import { CostumeIDenitytService } from '@proxy/identity';
 
 @Component({
   selector: 'app-users',
@@ -17,6 +17,7 @@ import { costumeIDenitytService } from '@proxy/identity';
 })
 export class UsersComponent implements OnInit {
 
+  Users:PagedResultDto<UserData>
   p: number = 1;
   isModalOpen = false
   abc: IdentityUserUpdateDto = {
@@ -36,14 +37,13 @@ export class UsersComponent implements OnInit {
 
   }
 
-  Users: PagedResultDto<IdentityUserDto> = new PagedResultDto<IdentityUserDto>()
   filter: GetIdentityUsersInput = {
     skipCount: 0,
     filter: null,
     maxResultCount: 200
 
   };
-  constructor(private IdentityUser: costumeIDenitytService, private confirmation: ConfirmationService,
+  constructor(private IdentityUser: CostumeIDenitytService, private confirmation: ConfirmationService,
     public readonly list: ListService,
     private blobstorage: FileService
     ) {
@@ -72,7 +72,7 @@ export class UsersComponent implements OnInit {
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.Users = response;
-      console.log(this.Users)
+      // console.log(abc)
 
     });
 
@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit {
   deleteuser(usedid) {
     this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
       if (status === Confirmation.Status.confirm) {
-        this.IdentityUser.delete(usedid).subscribe(() => this.list.get());
+        // this.IdentityUser.delete(usedid).subscribe(() => this.list.get());
       }
     });
   }

@@ -95,7 +95,7 @@ namespace BOOKSTore.Payment
 
             if (objPaymentRequest.validate())
             {
-                var msg = "";
+                var msg = string.Empty;
                 if (objPaymentRequest.emailInvalid)
                 {
                     msg = "Email is not valid";

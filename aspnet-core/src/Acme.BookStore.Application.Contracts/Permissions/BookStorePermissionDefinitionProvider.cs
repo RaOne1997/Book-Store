@@ -18,6 +18,12 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
         booksPermission.AddChild(BookStorePermissions.Books.Delete, L("Permission:Books.Delete"));
         //Define your own permissions here. Example:
         //myGroup.AddPermission(BookStorePermissions.MyPermission1, L("Permission:MyPermission1"));
+
+        //var ProductServicesGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
+        var productPermission = bookStoreGroup.AddPermission(BookStorePermissions.Products.Default, L("Permission:Product"));
+        productPermission.AddChild(BookStorePermissions.Products.Create, L("Permission:product.Create"));
+        productPermission.AddChild(BookStorePermissions.Products.Edit, L("Permission:product.Edit"));
+        productPermission.AddChild(BookStorePermissions.Products.Delete, L("Permission:product.Delete"));
     }
 
     private static LocalizableString L(string name)

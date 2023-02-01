@@ -20,6 +20,9 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Acme.BookStore.Currency_code;
+using Acme.BookStore.ProductModule;
+using Acme.BookStore.ProductConsts;
+using Acme.BookStore.OrderModul;
 
 namespace Acme.BookStore.EntityFrameworkCore;
 
@@ -45,6 +48,14 @@ public class BookStoreDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
+
+
+    #region"Useradded DBset"
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Orders> Orders { get; set; }
+    //public DbSet<OrderLine> orderLines { get; set; }
+
+    #endregion
 
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
@@ -123,19 +134,42 @@ public class BookStoreDbContext :
            
         });
 
-
-
-
-
-
-
         builder.Entity<Emailtemplate>(b =>
         {
             b.ToTable(BOOKSToreConsts.DbTablePrefix + nameof(Emailtemplate),
                  BOOKSToreConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             //b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+        }); 
+        builder.Entity<Orders>(b =>
+        {
+            b.ToTable(BOOKSToreConsts.DbTablePrefix + nameof(Orders),
+                 BOOKSToreConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            //b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+        }); builder.Entity<OrderLine>(b =>
+        {
+            b.ToTable(BOOKSToreConsts.DbTablePrefix + nameof(OrderLine),
+                 BOOKSToreConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasKey(op => new { op.OrderId, op.ProductID });
+
+            //auto configure for the base class props
+            //b.Property(x => x.Name).IsRequired().HasMaxLength(128);
         });
+        builder.Entity<Product>(b =>
+        {
+            b.ToTable(BOOKSToreConsts.DbTablePrefix + nameof(Product),
+                 BOOKSToreConsts.DbSchema); 
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Name).IsRequired().HasMaxLength(ProductConst.NameMaxLength);
+            b.Property(x=>x.Price).IsRequired().HasColumnType("decimal(10,4)");
+            b.Property(x => x.IsAvailable).IsRequired();
+        });
+
+
+
+
 
         /* Configure your own tables/entities inside here */
 

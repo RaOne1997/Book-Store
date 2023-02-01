@@ -23,7 +23,7 @@ namespace Acme.BookStore.healperclass
 
         }
 
-        public async Task<string> GetResetPasswordUrlAsync(string appName)
+        public string GetResetPasswordUrl(string appName)
         {
             switch (appName)
             {

@@ -4,6 +4,6 @@ namespace Acme.BookStore.healperclass
 {
     public interface IAppUrlProviders
     {
-        Task<string> GetResetPasswordUrlAsync(string appName);
+        string GetResetPasswordUrl(string appName);
     }
 }

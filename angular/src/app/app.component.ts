@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
 constructor( private replaceableComponents: ReplaceableComponentsService,private primengConfig: PrimeNGConfig){
   this.replaceableComponents.add({
-    component: NavbarwithsideComponent,
+    component: COstumnavbar,
     key: eThemeBasicComponents.ApplicationLayout
   });
 

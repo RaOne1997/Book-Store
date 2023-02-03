@@ -10,8 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -46,7 +48,9 @@ namespace Acme.BookStore.inportuserformexal
         {
             try
             {
-                ExcelConn(@"C:\Users\AbhijeetWarade\Desktop\test.xlsx");
+                Debug.WriteLine("Send to debug output.");
+                int i = 0;
+                ExcelConn(@"C:\Users\AbhijeetWarade\Desktop\Book1.xlsx");
                 //var abc2 = File.ReadAllText(FilePath);
 
                 Query = string.Format("Select * FROM [{0}]", "Sheet1$");
@@ -94,6 +98,8 @@ namespace Acme.BookStore.inportuserformexal
                     ssss.SetProperty(UserConsts.TitlePropertyName, title);
 
                     var abcddd = await _customerIdentity.CreateAsync(ssss);
+                    i++;
+                    Debug.WriteLine($"current record count - {i}");
                 }
                 //await CurrentUnitOfWork.SaveChangesAsync();
             }
@@ -119,6 +125,69 @@ namespace Acme.BookStore.inportuserformexal
             Econ = new OleDbConnection(constr);
 
         }
+
+        public async Task fakedataAsync()
+        {
+            var list  = new List<value>();
+            for(int i = 0; i <= 20; i++)
+            {
+
+                var ssss = new value
+                {
+                    Email = Faker.Internet.Email(),
+                    Name = Faker.Name.First(),
+                    password = "Abhij",
+                    IsActive = true,
+                    LockoutEnabled = true,
+                    Roles = "user",
+                    Surname = Faker.Name.Last(),
+                    UserName = Faker.Internet.UserName(),
+                    Gender = (char)Faker.Enum.Random<Gender>(),
+                    _Title = 1
+                    
+                };
+
+                list.Add(ssss);
+                
+                //ssss.SetProperty(UserConsts.GenderPropertyName, Faker.Enum.Random<Gender>().ToString());
+                //var title = (Title)Enum.ToObject(typeof(Title), 1);
+                //ssss.SetProperty(UserConsts.TitlePropertyName, title);
+
+                //var abcddd = await _customerIdentity.CreateAsync(ssss);
+            }
+            var abcc =ConvertToDataTable<value>(list);
+        }
+
+        private DataTable ConvertToDataTable<T>(List<T> models)
+        {
+            // creating a data table instance and typed it as our incoming model   
+            // as I make it generic, if you want, you can make it the model typed you want.  
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties of that model  
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            // Loop through all the properties              
+            // Adding Column name to our datatable  
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names    
+                dataTable.Columns.Add(prop.Name);
+            }
+            // Adding Row and its value to our dataTable  
+            foreach (T item in models)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows    
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                // Finally add value to datatable    
+                dataTable.Rows.Add(values);
+            }
+            return dataTable;
+        }
     }
     public class value
     {
@@ -133,5 +202,12 @@ namespace Acme.BookStore.inportuserformexal
         public string Roles { get; set; }
         public string Surname { get; set; }
 
+    }
+
+    public enum Gender
+    {
+
+        Female = 'F',
+        Male = 'M'
     }
 }

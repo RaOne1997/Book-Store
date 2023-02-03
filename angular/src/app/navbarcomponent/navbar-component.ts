@@ -7,6 +7,7 @@ import { LayoutService } from '../../lib/services/layout.service';
 @Component({
   selector: 'abp-layout-application',
   templateUrl: './navbar-component.html',
+  styleUrls: ['./navbarwith.component.scss'],
  
   animations: [slideFromBottom, collapseWithMargin],
   providers: [LayoutService, SubscriptionService],

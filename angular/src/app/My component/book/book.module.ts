@@ -8,6 +8,7 @@ import { CreateinvoiceComponent } from '../createinvoice/createinvoice.component
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgModule } from '@angular/core';
 import { APP_ROUTE_PROVIDER } from 'src/app/route.provider';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { APP_ROUTE_PROVIDER } from 'src/app/route.provider';
   imports: [
     BookRoutingModule,
     SharedModule,
-    NgbDatepickerModule
+    NgbDatepickerModule,
+    
 
   ],
   providers: [APP_ROUTE_PROVIDER],

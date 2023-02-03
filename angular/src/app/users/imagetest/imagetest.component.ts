@@ -171,7 +171,7 @@ export class ImagetestComponent extends AutoMapper implements OnInit {
   show(UserID = null) {
     this.UserID = UserID
     if (UserID != null) {
-      this.IdentityUser.get(UserID).forEach(element => {
+      this.IdentityUsers.get(UserID).forEach(element => {
         this.getuserforedit = element
         console.log(this.getuserforedit)
       });

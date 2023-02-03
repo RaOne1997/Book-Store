@@ -24,6 +24,10 @@ using Acme.BookStore.Regrist;
 using Volo.Abp.DependencyInjection;
 using Acme.BookStore.OrderModul;
 using Volo.Abp.Validation;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.IO;
+using System.Collections;
 
 namespace Acme.BookStore.Identity
 {
@@ -58,55 +62,65 @@ namespace Acme.BookStore.Identity
         [Authorize(IdentityPermissions.Users.Create)]
         public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            var bac = new SaveBlobInputDto();
-            await IdentityOptions.SetAsync();
-
-            var user = new IdentityUser(
-                GuidGenerator.Create(),
-                input.UserName,
-                input.Email,
-                CurrentTenant.Id
-            );
-
-
-            var profileImage = input.ExtraProperties.GetValueOrDefault("Profilepic");
-            var gender = input.ExtraProperties.GetValueOrDefault("Gender");
-            var title = input.ExtraProperties.GetValueOrDefault("Title");
-            title = (Title)Enum.ToObject(typeof(Title), title);
-
-            if (profileImage != null)
+            try
             {
-                 bac = new SaveBlobInputDto
+                var bac = new SaveBlobInputDto();
+                await IdentityOptions.SetAsync();
+
+                var user = new IdentityUser(
+                    GuidGenerator.Create(),
+                    input.UserName,
+                    input.Email,
+                    CurrentTenant.Id
+                );
+
+
+                var profileImage = input.ExtraProperties.GetValueOrDefault("Profilepic");
+                var gender = input.ExtraProperties.GetValueOrDefault("Gender");
+                var title = input.ExtraProperties.GetValueOrDefault("Title");
+                title = (Title)Enum.ToObject(typeof(Title), title);
+
+                if (profileImage != null)
                 {
-                    Content = profileImage.ToString(),
-                    Name = input.Email
-                };
-                
-                //byte[] bytes = System.Convert.FromBase64String(abc.ToString());
-                //user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
-            }
-            else
-            {
-                var acb = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
-                 bac = new SaveBlobInputDto
+                    bac = new SaveBlobInputDto
+                    {
+                        Content = profileImage.ToString(),
+                        Name = input.Email
+                    };
+
+                    //byte[] bytes = System.Convert.FromBase64String(abc.ToString());
+                    //user.SetProperty(UserConsts.profilephotoPropertyName, bytes);
+                }
+                else
                 {
+                    var acb = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
+                    bac = new SaveBlobInputDto
+                    {
 
-                    Content = Convert.ToBase64String(acb.Content),
-                    Name = input.Email
-                };
-               
+                        Content = Convert.ToBase64String(acb.Content),
+                        Name = input.Email
+                    };
+
+                }
+                user.SetProperty(UserConsts.TitlePropertyName, title);
+                user.SetProperty(UserConsts.GenderPropertyName, gender);
+                //input.MapExtraPropertiesTo(user);
+
+
+
+
+                (await _UserManager.CreateAsync(user, input.Password, false)).CheckErrors();
+                await UpdateUserByInput(user, input);
+                (await _UserManager.UpdateAsync(user)).CheckErrors();
+                await _fileAppService.SaveBlobAsync(bac);
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
             }
-            user.SetProperty(UserConsts.TitlePropertyName, title);
-            user.SetProperty(UserConsts.GenderPropertyName, gender);
-            //input.MapExtraPropertiesTo(user);
+            catch(Exception ex) {
 
-            (await _UserManager.CreateAsync(user, input.Password, false)).CheckErrors();
-            await UpdateUserByInput(user, input);
-            (await _UserManager.UpdateAsync(user)).CheckErrors();
-            await _fileAppService.SaveBlobAsync(bac);
-            await CurrentUnitOfWork.SaveChangesAsync();
-
-            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+                return null;
+            }
         }
         [Authorize(IdentityPermissions.Users.Update)]
         public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
@@ -166,16 +180,18 @@ namespace Acme.BookStore.Identity
 
         [Authorize(IdentityPermissions.Users.Default)]
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
-        {
+                {
             var count = await UserRepository.GetCountAsync(input.Filter);
+            input.Sorting = "Name";
             var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
             var userlist = new List<IdentityUser>();
             foreach (var VARIABLE in list)
             {
                 var image = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = VARIABLE.Email });
-                var defaultImage = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
+                image = image!=null? image : await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = "Default" });
+                
 
-                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content != null ? image.Content : defaultImage.Content);
+                VARIABLE.SetProperty(UserConsts.profilephotoPropertyName, image.Content);
                 userlist.Add(VARIABLE);
             }
 
@@ -185,6 +201,56 @@ namespace Acme.BookStore.Identity
                 abc
 
             );
+        }
+
+
+
+        public  void CompressImage(datz datz)
+        {
+            string str=string.Empty;
+            //var FileName = Path.GetFileName(SoucePath);
+            datz.DestPath =datz.DestPath + "/" + "test.jpg";
+            if (File.Exists(datz.SoucePath))
+            {
+                // Read all the content in one string
+                // and display the string
+                str = File.ReadAllText(datz.SoucePath);
+            }
+                ImageConverter ic = new ImageConverter();
+            byte[] bytes = System.Convert.FromBase64String(str.ToString());
+            Image img = (Image)ic.ConvertFrom(bytes); // Parameter not valid
+
+            MemoryStream ms = new MemoryStream(bytes);
+            Image imgs = Image.FromStream(ms);
+
+
+            using (Bitmap bmp1 = new Bitmap(imgs))
+            {
+                ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+
+                System.Drawing.Imaging.Encoder QualityEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+                EncoderParameter myEncoderParameter = new EncoderParameter(QualityEncoder,datz.quality);
+
+                myEncoderParameters.Param[0] = myEncoderParameter;
+                bmp1.Save(datz.DestPath, jpgEncoder, myEncoderParameters);
+
+            }
+        }
+
+        private  ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
@@ -210,5 +276,12 @@ namespace Acme.BookStore.Identity
             }
 
         }
+    }
+
+    public class datz
+    {
+            public string SoucePath{get;set;}
+            public string DestPath{get;set;} 
+            public int quality { get; set; }
     }
 }

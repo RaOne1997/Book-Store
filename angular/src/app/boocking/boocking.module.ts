@@ -12,19 +12,21 @@ import {CardModule} from 'primeng/card';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { SharedModule } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     BoockingComponent,
     PersonInformationComponent,
     SeatComponent,
     PaymentComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    
   ],
   imports: [
    
     CommonModule,
     SharedModule,FormsModule,
-    
+    NgxPaginationModule,
     BoockingRoutingModule,
     StepsModule,
     ToastModule,

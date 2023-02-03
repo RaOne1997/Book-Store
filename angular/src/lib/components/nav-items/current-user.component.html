@@ -7,11 +7,11 @@
   #currentUserDropdown="ngbDropdown">
   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown"
     aria-expanded="false">
-    <small *ngIf="(selectedTenant$ | async)?.name as tenantName">
+    <small class="me-1" *ngIf="(selectedTenant$ | async)?.name as tenantName">
       <i>{{ tenantName }}</i>
     </small>
     <!-- <strong>{{ (currentUser$ | async)?.userName }}</strong> -->
-    <img src="data:application/jpg;base64,{{this.userdata?.content}}"  height="30" width="30" alt="Avatar"
+    /<img class="ms-1" src="data:application/jpg;base64,{{this.userdata?.content}}"  height="30" width="30" alt="Avatar"
       loading="lazy" />
   </a>
   <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm me-3" aria-labelledby="dropdownMenuLink"
